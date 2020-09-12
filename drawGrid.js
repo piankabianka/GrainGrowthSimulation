@@ -5,7 +5,11 @@ canvas.width=window.innerWidth;
 canvas.height=window.innerHeight-document.querySelector('#navigation').offsetHeight;
 const c=canvas.getContext('2d');
 
-//DATA
+//DATA - nodesXValue, nodesYValue, cellSize, startPoint, endPointX, endPointY, grainsNumber, kT
+
+/*export default data = {
+    lala:true
+}*/
 
 const submitButton=document.querySelector('#submit');
 
@@ -26,6 +30,8 @@ let grainsNumber=undefined;
 const kTParameter=document.querySelector('#kTParameter');
 let kT=undefined;
 
+let parameters={};
+
 
 //SUBMIT DATA
 submitButton.addEventListener('click', function(e){
@@ -38,8 +44,6 @@ submitButton.addEventListener('click', function(e){
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
 
-    console.log(grainsNumber);
-    console.log(kT);
     
     for(let i=0; i<=nodesXValue; i++){
         c.beginPath();
@@ -56,6 +60,22 @@ submitButton.addEventListener('click', function(e){
         c.strokeStyle="#C7D4CF";
         c.stroke();
     }
+
+    parameters={
+        nodesXValue:nodesXValue,
+        nodesYValue:nodesYValue,
+        cellSize:cellSize,
+        startPoint:startPoint,
+        endPointX:endPointX,
+        endPointY:endPointY,
+        grainsNumber:grainsNumber,
+        kT:kT
+    }
 })
-    
+
+const getData = () => {
+    return parameters;
+  };
+  
+  module.exports.getData = getData;
     
