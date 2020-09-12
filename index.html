@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <meta charset="utf-8">
+    <link href="styles.css" rel="stylesheet" />
+	<title>Grain growth</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+        <nav id="navigation">
+              <ul>
+                  <li class="input" id="nodesX">
+                    <input type="text" placeholder="il. węzłów x" /> 
+                  </li>
+                  <li class="input" id="nodesY">
+                    <input type="text" placeholder="il. węzłów y" />
+                  </li>
+                  <li class="input">
+                    <input type="text" placeholder="il. zarodków" />
+                  </li>
+                  <li class="input">
+                    <input type="text" placeholder="parametr kT" />
+                  </li>
+                  <li>
+                      <button class="button" id="submit">ZATWIERDŹ</button>
+                  </li>
+                  <li>
+                    <button class="button">KROK</button>
+                  </li>
+                  <li>
+                    <button class="button">WYCZYŚĆ</button>
+                  </li>
+              </ul>
+        </nav>
+        <canvas></canvas>
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
+        <script src="drawGrid.js"></script>
   </body>
 </html>
+
