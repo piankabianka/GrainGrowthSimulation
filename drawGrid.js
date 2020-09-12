@@ -20,6 +20,12 @@ const startPoint=10;
 let endPointX=undefined
 let endPointY=undefined;
 
+const grains=document.querySelector('#grainsNumber');
+let grainsNumber=undefined;
+
+const kTParameter=document.querySelector('#kTParameter');
+let kT=undefined;
+
 
 //SUBMIT DATA
 submitButton.addEventListener('click', function(e){
@@ -29,6 +35,11 @@ submitButton.addEventListener('click', function(e){
     nodesYValue=nodesY.querySelector('input[type="text"]').value;
     endPointX=cellSize*nodesXValue;
     endPointY=cellSize*nodesYValue;
+    grainsNumber=grains.querySelector('input[type="text"]').value;
+    kT=kTParameter.querySelector('input[type="text"]').value;
+
+    console.log(grainsNumber);
+    console.log(kT);
     
     for(let i=0; i<=nodesXValue; i++){
         c.beginPath();
