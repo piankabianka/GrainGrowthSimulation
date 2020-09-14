@@ -21,8 +21,8 @@ let nodesXValue=undefined;
 const nodesY=document.querySelector('#nodesY');
 let nodesYValue=undefined;
 
-const cellSize=10;
-const startPoint=10;
+const cellSize=50;
+const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
 
@@ -41,13 +41,13 @@ submitButton.addEventListener('click', function(e){
 
     nodesXValue=nodesX.querySelector('input[type="text"]').value;
     nodesYValue=nodesY.querySelector('input[type="text"]').value;
-    endPointX=cellSize*nodesXValue;
-    endPointY=cellSize*nodesYValue;
+    endPointX=cellSize*nodesXValue-cellSize;
+    endPointY=cellSize*nodesYValue-cellSize;
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
 
     
-    for(let i=0; i<=nodesXValue; i++){
+    for(let i=0; i<nodesXValue; i++){
         c.beginPath();
         c.moveTo(i*cellSize, startPoint);
         c.lineTo(i*cellSize, endPointY);
@@ -55,7 +55,7 @@ submitButton.addEventListener('click', function(e){
         c.stroke();
     }
     
-    for(let i=0; i<=nodesYValue; i++){
+    for(let i=0; i<nodesYValue; i++){
         c.beginPath();
         c.moveTo(startPoint, i*cellSize);
         c.lineTo(endPointX, i*cellSize);

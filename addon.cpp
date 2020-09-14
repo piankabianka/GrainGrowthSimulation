@@ -1,24 +1,32 @@
-#include <node.h>
+#include <nan.h>
 
-namespace demo {
+int number=0;
 
-using v8::FunctionCallbackInfo;
-using v8::Isolate;
-using v8::Local;
-using v8::Object;
-using v8::String;
-using v8::Value;
-
-void Method(const FunctionCallbackInfo<Value>& args) {
-  Isolate* isolate = args.GetIsolate();
-  args.GetReturnValue().Set(String::NewFromUtf8(
-      isolate, "world").ToLocalChecked());
+NAN_METHOD(IsPrime) {
+    if (!info[0]->IsNumber()) {
+        Nan::ThrowTypeError("argument must be a number!");
+        return;
+    }
+    
+    number= (int) info[0]->NumberValue(Nan::GetCurrentContext()).FromJust();
+    
+    if (number < 2) {
+        info.GetReturnValue().Set(Nan::False());
+        return;
+    }
+    
+    for (int i = 2; i < number; i++) {
+        if (number % i == 0) {
+            info.GetReturnValue().Set(Nan::False());
+            return;
+        }
+    }
+    
+    info.GetReturnValue().Set(Nan::True());
 }
 
-void Initialize(Local<Object> exports) {
-  NODE_SET_METHOD(exports, "hello", Method);
+NAN_MODULE_INIT(Initialize) {
+    NAN_EXPORT(target, IsPrime);
 }
 
-NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
-
-}
+NODE_MODULE(addon, Initialize)
