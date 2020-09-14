@@ -6,7 +6,10 @@
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electron/electron-quick-start.git"
+  },
   "keywords": [
     "Electron",
     "quick",
@@ -18,5 +21,13 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^10.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/electron/electron-quick-start/issues"
+  },
+  "homepage": "https://github.com/electron/electron-quick-start#readme",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "nan": "^2.14.1"
   }
 }
