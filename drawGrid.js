@@ -11,6 +11,8 @@ const c=canvas.getContext('2d');
     lala:true
 }*/
 
+
+
 const submitButton=document.querySelector('#submit');
 
 const nodesX=document.querySelector('#nodesX');
@@ -73,9 +75,21 @@ submitButton.addEventListener('click', function(e){
     }
 })
 
+canvasParameters={
+    canvas:document.querySelector('canvas'),
+    width:window.innerWidth,
+    height:window.innerHeight-document.querySelector('#navigation').offsetHeight,
+    c:canvas.getContext('2d')
+}
+
+const getCanvas = () => {
+    return canvasParameters;
+  };
+
 const getData = () => {
     return parameters;
   };
   
   module.exports.getData = getData;
+  module.exports.getCanvas=getCanvas;
     
