@@ -11,14 +11,12 @@ using namespace std;
 
 int main()
 {
-	GlobalData data;
-	data.showData();
-	
-	Cell cell;
-	cell.showCell();
 
 	CellsTab cellsTab;
+	
+	cellsTab.grainGrowth();
 	cellsTab.showCellsTab();
+	
 	
 	system("pause");
 	return 0;

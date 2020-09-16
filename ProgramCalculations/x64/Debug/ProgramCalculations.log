@@ -1,0 +1,4 @@
+﻿  CellsTab.cpp
+C:\Users\Bianka\Desktop\Moja nauka\Materiały do inżynierki\Kody\GrainGrowthSimulation\ProgramCalculations\CellsTab.cpp(60,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+C:\Users\Bianka\Desktop\Moja nauka\Materiały do inżynierki\Kody\GrainGrowthSimulation\ProgramCalculations\CellsTab.cpp(68,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+  ProgramCalculations.vcxproj -> C:\Users\Bianka\Desktop\Moja nauka\Materiały do inżynierki\Kody\GrainGrowthSimulation\ProgramCalculations\x64\Debug\ProgramCalculations.exe
