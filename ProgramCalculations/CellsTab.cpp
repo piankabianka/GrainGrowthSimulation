@@ -35,7 +35,9 @@ CellsTab::CellsTab() {
 void CellsTab::showCellsTab() {
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
-			cellsTab[i][j].showCell();
+			//cellsTab[i][j].showCell();
+			cout << cellsTab[i][j].color.r << ' ' << cellsTab[i][j].color.g << ' ' << cellsTab[i][j].color.b;
+			cout << "\t";
 		}
 		cout << endl;
 	}
@@ -85,5 +87,55 @@ void CellsTab::grainGrowth() {
 	} while (modifiedNumber < data.germsNumber);
 	
 
+}
+
+void CellsTab::iteration() {
+	copyTab = new Cell * [cellsNumberW+2];
+
+	for (int i = 0; i < cellsNumberW+2; i++) {
+		copyTab[i] = new Cell[cellsNumberH+2];
+	}
+
+	for (int i = 0; i < cellsNumberW+2; i++) {
+		for (int j = 0; j < cellsNumberH+2; j++) {
+			copyTab[i][j] = Cell();
+		}
+	}
+
+	//srodek tablicy
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			copyTab[i+1][j+1] = cellsTab[i][j];
+		}
+	}
+
+	//rogi
+
+	copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
+	copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
+	copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
+	copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
+
+	//brzegi
+
+	for (int i = 1; i < cellsNumberH+1; i++) {
+		copyTab[0][i] = cellsTab[cellsNumberW - 1][i-1];
+		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
+	}
+
+	for (int i = 1; i < cellsNumberW+1; i++) {
+		copyTab[i][0] = cellsTab[i-1][cellsNumberH - 1];
+		copyTab[i][cellsNumberH+1] = cellsTab[i-1][0];
+	}
+
+	cout << "\n Copy tab: \n";
+	for (int i = 0; i < cellsNumberW + 2; i++) {
+		for (int j = 0; j < cellsNumberH + 2; j++) {
+			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
+			cout << "\t";
+		}
+		cout << endl;
+	}
+	
 }
 

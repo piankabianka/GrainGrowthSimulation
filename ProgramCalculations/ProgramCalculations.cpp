@@ -16,6 +16,7 @@ int main()
 	
 	cellsTab.grainGrowth();
 	cellsTab.showCellsTab();
+	cellsTab.iteration();
 	
 	
 	system("pause");

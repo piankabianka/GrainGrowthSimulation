@@ -7,6 +7,7 @@ using namespace std;
 struct CellsTab {
 
 	Cell** cellsTab;
+	Cell** copyTab;
 	//int** cellsTab;
 
 	int cellsNumberW;
@@ -15,6 +16,7 @@ struct CellsTab {
 	CellsTab();
 	void showCellsTab();
 	void grainGrowth();
+	void iteration();
 	bool checkIfColorExists(Color c);
 	Color generateRandomColor();
 };
