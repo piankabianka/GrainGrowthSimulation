@@ -30,6 +30,18 @@ CellsTab::CellsTab() {
 			cellsTab[i][j] = Cell();
 		}
 	}
+
+	copyTab = new Cell * [cellsNumberW + 2];
+
+	for (int i = 0; i < cellsNumberW + 2; i++) {
+		copyTab[i] = new Cell[cellsNumberH + 2];
+	}
+
+	for (int i = 0; i < cellsNumberW + 2; i++) {
+		for (int j = 0; j < cellsNumberH + 2; j++) {
+			copyTab[i][j] = Cell();
+		}
+	}
 }
 
 void CellsTab::showCellsTab() {
@@ -88,20 +100,66 @@ void CellsTab::grainGrowth() {
 	
 
 }
+bool checkIfColorIsWhite(Color c) {
+	if (c.r == 255 && c.g == 255 && c.b == 255) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+int CellsTab::countNeighbors(int index1, int index2) {
+	int counter = 0;
+
+	if (!checkIfColorIsWhite(copyTab[index1-1][index2].color) {
+		counter++;
+	}
+	if (!checkIfColorIsWhite(copyTab[index1][index2+1].color) {
+		counter++;
+	}
+	if (!checkIfColorIsWhite(copyTab[index1 + 1][index2].color) {
+		counter++;
+	}
+	if (!checkIfColorIsWhite(copyTab[index1][index2-1].color) {
+		counter++;
+	}
+	
+
+	return counter;
+}
+
+void setNewCellColor(int nghbCounter, int indexI, int indexJ) {
+	if (nghbCounter == 0) {
+		return;
+	}
+	else if (nghbCounter == 1) {
+		Color c;
+		Color colorTab[4];
+
+		colorTab[0] = copyTab[indexI - 1][indexJ].color;
+		colorTab[1] = copyTab[indexI][indexJ + 1].color;
+		colorTab[2] = copyTab[indexI + 1][indexJ].color;
+		colorTab[3] = copyTab[indexI][indexJ - 1].color;
+
+		for (int i = 0; i < 4; i++) {
+			if (!checkIfColorIsWhite(colorTab[i])) {
+				copyTab[indexI][indexJ].color = colorTab[i];
+				return;
+			}
+		}
+
+	}
+	else {
+
+		//TUTAJ DOROBIÆ!!!!!!
+		
+		
+	}
+}
 
 void CellsTab::iteration() {
-	copyTab = new Cell * [cellsNumberW+2];
-
-	for (int i = 0; i < cellsNumberW+2; i++) {
-		copyTab[i] = new Cell[cellsNumberH+2];
-	}
-
-	for (int i = 0; i < cellsNumberW+2; i++) {
-		for (int j = 0; j < cellsNumberH+2; j++) {
-			copyTab[i][j] = Cell();
-		}
-	}
-
+	
 	//srodek tablicy
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
@@ -128,13 +186,26 @@ void CellsTab::iteration() {
 		copyTab[i][cellsNumberH+1] = cellsTab[i-1][0];
 	}
 
-	cout << "\n Copy tab: \n";
+	/*cout << "\n Copy tab: \n";
 	for (int i = 0; i < cellsNumberW + 2; i++) {
 		for (int j = 0; j < cellsNumberH + 2; j++) {
 			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
 			cout << "\t";
 		}
 		cout << endl;
+	}*/
+
+	//w³asciwa iteracja i zliczanie s¹siadów
+
+	int nghbCounter = 0;
+
+	for (int i = 1; i < cellsNumberW + 1; i++) {
+		for (int j = 1; j < cellsNumberH + 2; j++) {
+			if (checkIfColorIsWhite(copyTab[i][j])) {
+				setNewCellColor(countNeighbors(i, j), i, j); //TUTEJ!!!!!!!!!!!!!!!!!!!!!
+			}
+		}
+		
 	}
 	
 }
