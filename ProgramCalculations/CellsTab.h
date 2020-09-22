@@ -8,7 +8,6 @@ struct CellsTab {
 
 	Cell** cellsTab;
 	Cell** copyTab;
-	//int** cellsTab;
 
 	int cellsNumberW;
 	int cellsNumberH;
@@ -19,6 +18,7 @@ struct CellsTab {
 	void showCellsTab();
 	void grainGrowth();
 	void singleIteration();
+	void monteCarloIteration();
 	void calculations();
 	void clearCopyTab();
 
@@ -28,4 +28,6 @@ struct CellsTab {
 	bool checkIfAllCellsAreModified();
 	Color setNewCellColor(int nghbCounter, int indexI, int indexJ);
 	Color generateRandomColor();
+
+	void calculateEnergy(int i, int j);
 };
