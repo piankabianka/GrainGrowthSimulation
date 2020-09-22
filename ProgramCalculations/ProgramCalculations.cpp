@@ -16,15 +16,8 @@ int main()
 	
 	cout << "POCZATKOWA TABELA KOMOREK" << endl;
 	cout << endl;
-	cellsTab.grainGrowth();
-	cellsTab.showCellsTab();
+	cellsTab.calculations();
 
-	cout << "POCZATKOWA TABELA KOMOREK" << endl;
-	cout << endl;
-	cellsTab.iteration();
-	cellsTab.showCellsTab();
-	
-	
 	system("pause");
 	return 0;
 }

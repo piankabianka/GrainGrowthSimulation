@@ -23,6 +23,7 @@ CellsTab::CellsTab() {
 
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
+	modifiedCells = 0;
 
 	cellsTab = new Cell* [cellsNumberW];
 
@@ -191,11 +192,21 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 				break;
 			}
 		}
+
+		modifiedCells++;
 	}
 	return c;
 }
 
-void CellsTab::iteration() {
+void CellsTab::clearCopyTab() {
+	for (int i = 0; i < cellsNumberW + 2; i++) {
+		for (int j = 0; j < cellsNumberH + 2; j++) {
+			copyTab[i][j] = Cell();
+		}
+	}
+}
+
+void CellsTab::singleIteration() {
 	
 	//srodek tablicy
 	for (int i = 0; i < cellsNumberW; i++) {
@@ -223,35 +234,53 @@ void CellsTab::iteration() {
 		copyTab[i][cellsNumberH+1] = cellsTab[i-1][0];
 	}
 
-	/*cout << "\n Copy tab: \n";
-	for (int i = 0; i < cellsNumberW + 2; i++) {
-		for (int j = 0; j < cellsNumberH + 2; j++) {
-			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
-			cout << "\t";
-		}
-		cout << endl;
-	}*/
 
 	//w³asciwa iteracja i zliczanie s¹siadów
-
-
-
+	
 	for (int i = 1; i < cellsNumberW + 1; i++) {
-		for (int j = 1; j < cellsNumberH + 2; j++) {
+		for (int j = 1; j < cellsNumberH + 1; j++) {
 			if (checkIfColorIsWhite(copyTab[i][j].color)) {
-				cellsTab[i-1][j-1].color=setNewCellColor(countNeighbors(i, j), i, j); //TUTEJ!!!!!!!!!!!!!!!!!!!!!
+				cellsTab[i - 1][j - 1].color = setNewCellColor(countNeighbors(i, j), i, j); 
+				
 			}
 		}
-		
 	}
 
-	/*for (int i = 1; i < cellsNumberW + 1; i++) {
-		for (int j = 1; j < cellsNumberH + 1; j++) {
-			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
-			cout << "\t";
-		}
-		cout << endl;
-	}*/
+	clearCopyTab();
 	
+}
+
+bool CellsTab:: checkIfAllCellsAreModified() {
+	int counter = 0;
+	bool returnValue;
+	for (int i = 0; i < cellsNumberW ; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			if (!checkIfColorIsWhite(cellsTab[i][j].color)) {
+				counter++;
+			}
+		}
+	}
+
+
+	GlobalData data;
+	if (counter == (cellsNumberW * cellsNumberH)) {
+		returnValue= true;
+	}
+	else
+		returnValue= false;
+
+	return returnValue;
+}
+
+void CellsTab::calculations() {
+	grainGrowth();
+
+	GlobalData data;
+
+	do {
+		singleIteration();		
+	} while (!checkIfAllCellsAreModified());
+
+	showCellsTab();
 }
 

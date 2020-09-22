@@ -7,7 +7,7 @@ using namespace std;
 
 
 GlobalData::GlobalData() {
-	height = 5;
+	height = 10;
 	width = 5;
 	cellSize = 10;
 	germsNumber = 5;

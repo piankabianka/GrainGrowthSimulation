@@ -12,15 +12,20 @@ struct CellsTab {
 
 	int cellsNumberW;
 	int cellsNumberH;
+	int modifiedCells;
+	
 
 	CellsTab();
 	void showCellsTab();
 	void grainGrowth();
-	void iteration();
+	void singleIteration();
+	void calculations();
+	void clearCopyTab();
 
 	bool checkIfColorExists(Color c);
 	int countNeighbors(int index1, int index2);
 	bool checkIfColorIsWhite(Color c);
+	bool checkIfAllCellsAreModified();
 	Color setNewCellColor(int nghbCounter, int indexI, int indexJ);
 	Color generateRandomColor();
 };
