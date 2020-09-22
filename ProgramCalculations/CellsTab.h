@@ -21,6 +21,6 @@ struct CellsTab {
 	bool checkIfColorExists(Color c);
 	int countNeighbors(int index1, int index2);
 	bool checkIfColorIsWhite(Color c);
-	void setNewCellColor(int nghbCounter, int indexI, int indexJ);
+	Color setNewCellColor(int nghbCounter, int indexI, int indexJ);
 	Color generateRandomColor();
 };

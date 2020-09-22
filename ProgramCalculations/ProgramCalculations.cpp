@@ -14,9 +14,15 @@ int main()
 
 	CellsTab cellsTab;
 	
+	cout << "POCZATKOWA TABELA KOMOREK" << endl;
+	cout << endl;
 	cellsTab.grainGrowth();
 	cellsTab.showCellsTab();
+
+	cout << "POCZATKOWA TABELA KOMOREK" << endl;
+	cout << endl;
 	cellsTab.iteration();
+	cellsTab.showCellsTab();
 	
 	
 	system("pause");

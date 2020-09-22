@@ -5,6 +5,11 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <map>
+#include <vector>
+#include <algorithm> 
+#include <string>
+#include <functional>
 
 using namespace std;
 
@@ -100,7 +105,7 @@ void CellsTab::grainGrowth() {
 	
 
 }
-bool checkIfColorIsWhite(Color c) {
+bool CellsTab::checkIfColorIsWhite(Color c) {
 	if (c.r == 255 && c.g == 255 && c.b == 255) {
 		return true;
 	}
@@ -112,29 +117,28 @@ bool checkIfColorIsWhite(Color c) {
 int CellsTab::countNeighbors(int index1, int index2) {
 	int counter = 0;
 
-	if (!checkIfColorIsWhite(copyTab[index1-1][index2].color) {
+	if (!checkIfColorIsWhite(copyTab[index1-1][index2].color))
 		counter++;
-	}
-	if (!checkIfColorIsWhite(copyTab[index1][index2+1].color) {
-		counter++;
-	}
-	if (!checkIfColorIsWhite(copyTab[index1 + 1][index2].color) {
-		counter++;
-	}
-	if (!checkIfColorIsWhite(copyTab[index1][index2-1].color) {
-		counter++;
-	}
-	
 
+
+	if (!checkIfColorIsWhite(copyTab[index1][index2+1].color))
+		counter++;
+	
+	if (!checkIfColorIsWhite(copyTab[index1 + 1][index2].color))
+		counter++;
+	
+	if (!checkIfColorIsWhite(copyTab[index1][index2-1].color))
+		counter++;
+	
 	return counter;
 }
 
-void setNewCellColor(int nghbCounter, int indexI, int indexJ) {
-	if (nghbCounter == 0) {
-		return;
-	}
-	else if (nghbCounter == 1) {
-		Color c;
+
+Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
+	Color c;
+	
+	if(nghbCounter!=0) {
+
 		Color colorTab[4];
 
 		colorTab[0] = copyTab[indexI - 1][indexJ].color;
@@ -142,20 +146,53 @@ void setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		colorTab[2] = copyTab[indexI + 1][indexJ].color;
 		colorTab[3] = copyTab[indexI][indexJ - 1].color;
 
+		int c1 = 0;
+		int c2 = 0;
+		int c3 = 0;
+		int c4 = 0;
+
 		for (int i = 0; i < 4; i++) {
-			if (!checkIfColorIsWhite(colorTab[i])) {
-				copyTab[indexI][indexJ].color = colorTab[i];
-				return;
+			if (c.compareColors(colorTab[i], colorTab[0])) {
+				c1++;
+			}
+			if (c.compareColors(colorTab[i] ,colorTab[1])) {
+				c2++;
+			}
+			if (c.compareColors(colorTab[i], colorTab[2])) {
+				c3++;
+			}
+			if (c.compareColors(colorTab[i], colorTab[3])) {
+				c4++;
 			}
 		}
 
-	}
-	else {
+		int counterTab[4] = { c1, c2, c3, c4 };
+		int tmp;
+		Color tmpColor;
 
-		//TUTAJ DOROBIÆ!!!!!!
-		
-		
+		for (int i = 0; i < 4; i++) {
+			for (int j = i + 1; j < 4; j++) {
+				if (counterTab[i] > counterTab[j]) {
+					tmp = counterTab[i];
+					tmpColor = colorTab[i];
+
+					counterTab[i] = counterTab[j];
+					colorTab[i] = colorTab[j];
+
+					counterTab[j] = tmp;
+					colorTab[j] = tmpColor;
+				}
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+			if (!checkIfColorIsWhite(colorTab[i])) {
+				c = colorTab[i];
+				break;
+			}
+		}
 	}
+	return c;
 }
 
 void CellsTab::iteration() {
@@ -197,16 +234,24 @@ void CellsTab::iteration() {
 
 	//w³asciwa iteracja i zliczanie s¹siadów
 
-	int nghbCounter = 0;
+
 
 	for (int i = 1; i < cellsNumberW + 1; i++) {
 		for (int j = 1; j < cellsNumberH + 2; j++) {
-			if (checkIfColorIsWhite(copyTab[i][j])) {
-				setNewCellColor(countNeighbors(i, j), i, j); //TUTEJ!!!!!!!!!!!!!!!!!!!!!
+			if (checkIfColorIsWhite(copyTab[i][j].color)) {
+				cellsTab[i-1][j-1].color=setNewCellColor(countNeighbors(i, j), i, j); //TUTEJ!!!!!!!!!!!!!!!!!!!!!
 			}
 		}
 		
 	}
+
+	/*for (int i = 1; i < cellsNumberW + 1; i++) {
+		for (int j = 1; j < cellsNumberH + 1; j++) {
+			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
+			cout << "\t";
+		}
+		cout << endl;
+	}*/
 	
 }
 
