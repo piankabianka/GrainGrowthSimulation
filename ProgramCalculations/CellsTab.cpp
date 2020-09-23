@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <ctime>
 #include <map>
@@ -25,6 +26,7 @@ CellsTab::CellsTab() {
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
 	modifiedCells = 0;
+
 
 	cellsTab = new Cell* [cellsNumberW];
 
@@ -391,3 +393,10 @@ void CellsTab::calculations() {
 
 }
 
+void CellsTab::saveDataToFile() {
+	ofstream zapis("zapiszdane.txt");
+
+	zapis << cellsTab[0][0].color.r ;
+
+	zapis.close();
+}

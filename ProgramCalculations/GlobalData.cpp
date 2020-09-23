@@ -10,15 +10,6 @@ GlobalData::GlobalData() {
 	fstream file;
 	file.open("data.txt");
 
-	/*ifstream odczyt("data.txt");
-
-	if (odczyt.is_open())
-	{
-		cout << "plik ok" << endl;
-	}
-	else
-		cout << "Nie uda³o siê otworzyæ pliku";*/
-
 	if (file.good()) {
 		cout << "plik ok" << endl;
 		while (!file.eof()) {

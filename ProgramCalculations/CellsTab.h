@@ -30,4 +30,6 @@ struct CellsTab {
 	Color generateRandomColor();
 
 	void calculateEnergy(int i, int j);
+
+	void saveDataToFile();
 };
