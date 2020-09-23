@@ -7,17 +7,38 @@ using namespace std;
 
 
 GlobalData::GlobalData() {
-	height = 5;
-	width = 5;
-	cellSize = 10;
-	germsNumber = 5;
-	kT = 2;
+	fstream file;
+	file.open("data.txt");
+
+	/*ifstream odczyt("data.txt");
+
+	if (odczyt.is_open())
+	{
+		cout << "plik ok" << endl;
+	}
+	else
+		cout << "Nie uda³o siê otworzyæ pliku";*/
+
+	if (file.good()) {
+		cout << "plik ok" << endl;
+		while (!file.eof()) {
+			file >> width;
+			file >> height;
+			file >> germsNumber;
+			file >> kT;
+		}
 
 	nodesNumberH = width + 1;
 	nodesNumberW = height + 1;
 
 	totalElementNumber = width * height;
 	totalNodesNumber = nodesNumberH * nodesNumberW;
+	}
+
+	else
+		cout << "Data error" << endl;
+
+	file.close();
 }
 
 void GlobalData::showData() {

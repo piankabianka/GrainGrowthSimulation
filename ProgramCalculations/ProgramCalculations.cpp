@@ -11,7 +11,8 @@ using namespace std;
 
 int main()
 {
-
+	GlobalData data;
+	data.showData();
 	CellsTab cellsTab;
 	
 	cout << "POCZATKOWA TABELA KOMOREK" << endl;

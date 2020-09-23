@@ -293,32 +293,31 @@ void CellsTab::calculateEnergy(int i, int j) {
 		}	
 	}
 
-	//cout << "Dlugosc wektora: " << colorVector.size()<<"indeksy" <<i<<","<<j<< endl;
-	
+	if (colorVector.size() != 0) {
+		srand(time(NULL));
+		colorRandom = colorVector[(rand() % colorVector.size())];
+		GlobalData data;
 
-	
-	srand(time(NULL));
-	colorRandom = colorVector[(rand() % colorVector.size())];
-	GlobalData data;
-	
-	for (int i = 0; i < 4; i++) {
-		if (!c.compareColors(colorRandom, nghbTab[i]))
-			energyRandom++;
-	}
+		for (int i = 0; i < 4; i++) {
+			if (!c.compareColors(colorRandom, nghbTab[i]))
+				energyRandom++;
+		}
 
-	if (energyRandom <= energy) {
-		cellsTab[i][j].color = colorRandom;
-		cellsTab[i][j].energy = energyRandom;
-	}
-	else {
-		double calculation = exp(-(energyRandom - energy) / data.kT);
-		double probability = (double)(rand() % 100) / 100;
-
-		if (probability <= calculation) {
+		if (energyRandom <= energy) {
 			cellsTab[i][j].color = colorRandom;
 			cellsTab[i][j].energy = energyRandom;
 		}
+		else {
+			double calculation = exp(-(energyRandom - energy) / data.kT);
+			double probability = (double)(rand() % 100) / 100;
+
+			if (probability <= calculation) {
+				cellsTab[i][j].color = colorRandom;
+				cellsTab[i][j].energy = energyRandom;
+			}
+		}
 	}
+	
 }
 
 void CellsTab::monteCarloIteration() {
