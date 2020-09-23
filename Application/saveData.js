@@ -42,6 +42,12 @@ submitButton.addEventListener('click', function(e){
         }
     }
 
-    console.log(colorArray);
+   // console.log(colorArray);
     
 });
+
+const getData = () => {
+    return colorArray;
+  };
+  
+  module.exports.getData = getData;

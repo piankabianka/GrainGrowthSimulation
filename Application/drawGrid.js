@@ -1,27 +1,20 @@
-
+const data = require('./saveData.js');
 //CANVAS
 const canvas=document.querySelector('canvas');
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight-document.querySelector('#navigation').offsetHeight;
 const c=canvas.getContext('2d');
 
-//DATA - nodesXValue, nodesYValue, cellSize, startPoint, endPointX, endPointY, grainsNumber, kT
-
-/*export default data = {
-    lala:true
-}*/
-
-
 
 const submitButton=document.querySelector('#submit');
 
-const nodesX=document.querySelector('#nodesX');
-let nodesXValue=undefined;
+const elementsX=document.querySelector('#nodesX');
+let elementsXValue=undefined;
 
-const nodesY=document.querySelector('#nodesY');
-let nodesYValue=undefined;
+const elementsY=document.querySelector('#nodesY');
+let elementsYValue=undefined;
 
-const cellSize=50;
+const cellSize=20;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -39,15 +32,15 @@ let parameters={};
 submitButton.addEventListener('click', function(e){
     e.preventDefault();
 
-    nodesXValue=nodesX.querySelector('input[type="text"]').value;
-    nodesYValue=nodesY.querySelector('input[type="text"]').value;
-    endPointX=cellSize*nodesXValue-cellSize;
-    endPointY=cellSize*nodesYValue-cellSize;
+    elementsXValue=elementsX.querySelector('input[type="text"]').value;
+    elementsYValue=elementsY.querySelector('input[type="text"]').value;
+    endPointX=cellSize*elementsXValue;
+    endPointY=cellSize*elementsYValue;
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
 
     
-    for(let i=0; i<nodesXValue; i++){
+    for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
         c.moveTo(i*cellSize, startPoint);
         c.lineTo(i*cellSize, endPointY);
@@ -55,7 +48,7 @@ submitButton.addEventListener('click', function(e){
         c.stroke();
     }
     
-    for(let i=0; i<nodesYValue; i++){
+    for(let i=0; i<=elementsYValue; i++){
         c.beginPath();
         c.moveTo(startPoint, i*cellSize);
         c.lineTo(endPointX, i*cellSize);
@@ -63,33 +56,6 @@ submitButton.addEventListener('click', function(e){
         c.stroke();
     }
 
-    parameters={
-        nodesXValue:nodesXValue,
-        nodesYValue:nodesYValue,
-        cellSize:cellSize,
-        startPoint:startPoint,
-        endPointX:endPointX,
-        endPointY:endPointY,
-        grainsNumber:grainsNumber,
-        kT:kT
-    }
 })
 
-canvasParameters={
-    canvas:document.querySelector('canvas'),
-    width:window.innerWidth,
-    height:window.innerHeight-document.querySelector('#navigation').offsetHeight,
-    c:canvas.getContext('2d')
-}
-
-const getCanvas = () => {
-    return canvasParameters;
-  };
-
-const getData = () => {
-    return parameters;
-  };
-  
-  module.exports.getData = getData;
-  module.exports.getCanvas=getCanvas;
     
