@@ -394,9 +394,15 @@ void CellsTab::calculations() {
 }
 
 void CellsTab::saveDataToFile() {
-	ofstream zapis("zapiszdane.txt");
+	ofstream saveData("calculatedData.csv");
 
-	zapis << cellsTab[0][0].color.r ;
 
-	zapis.close();
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			saveData << cellsTab[i][j].color.r << ",";
+			saveData << cellsTab[i][j].color.g << ",";
+			saveData << cellsTab[i][j].color.b << "\n";
+		}
+	}
+	saveData.close();
 }
