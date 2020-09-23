@@ -26,4 +26,22 @@ submitButton.addEventListener('click', function(e){
             console.log(err);
         }
     })
+
+
+    const dataToDisplay=fs.readFileSync('C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/calculatedData.csv','utf8');
+    let color="";
+    let colorArray=[];
+
+    for(let c of dataToDisplay){
+        if(c==="\n"){
+            colorArray.push(color);
+            color="";
+        }
+        else{
+            color+=c;
+        }
+    }
+
+    console.log(colorArray);
+    
 });
