@@ -2,6 +2,7 @@
 #include "Cell.h"
 #include "Color.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 struct CellsTab {
@@ -16,7 +17,7 @@ struct CellsTab {
 	int kT;
 	
 
-	CellsTab();
+	CellsTab(string path);
 	void showCellsTab();
 	void grainGrowth();
 	void singleIteration();

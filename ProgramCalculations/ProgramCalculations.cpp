@@ -9,13 +9,16 @@
 using namespace std;
 
 
-int main()
-{	CellsTab cellsTab;
+int main(int argc, char** argv)
+{	
+
+	//cout << argv[1] << endl;
+	CellsTab cellsTab(argv[1]);
 	
 	cellsTab.calculations();
 	cellsTab.saveDataToFile();
 
-	system("pause");
+	//system("pause");
 	return 0;
 }
 

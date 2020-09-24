@@ -2,15 +2,17 @@
 #include "GlobalData.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 
 
 
-GlobalData::GlobalData() {
+GlobalData::GlobalData(string path) {
 	fstream file;
-	file.open("data.txt");
+	file.open(path);
 
 	if (file.good()) {
+		cout << "PLIK OK!" << endl;
 		while (!file.eof()) {
 			file >> width;
 			file >> height;
@@ -26,7 +28,7 @@ GlobalData::GlobalData() {
 	}
 
 	else
-		cout << "Data error" << endl;
+		cout << "Data error-no such file???" << endl;
 
 	file.close();
 }

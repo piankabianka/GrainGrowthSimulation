@@ -14,7 +14,7 @@ let elementsXValue=undefined;
 const elementsY=document.querySelector('#nodesY');
 let elementsYValue=undefined;
 
-const cellSize=5;
+const cellSize=10;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -25,29 +25,8 @@ let grainsNumber=undefined;
 const kTParameter=document.querySelector('#kTParameter');
 let kT=undefined;
 
-let parameters={};
 
-
-//SUBMIT DATA
-submitButton.addEventListener('click', function(e){
-    e.preventDefault();
-
-    elementsXValue=elementsX.querySelector('input[type="text"]').value;
-    elementsYValue=elementsY.querySelector('input[type="text"]').value;
-    endPointX=cellSize*elementsXValue;
-    endPointY=cellSize*elementsYValue;
-    grainsNumber=grains.querySelector('input[type="text"]').value;
-    kT=kTParameter.querySelector('input[type="text"]').value;
-
-    var fs=require('fs');
-    let string="";
-    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT;
-    fs.writeFileSync("C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/data.txt",string, 'utf8', function(err){
-        if(err){
-            console.log(err);
-        }
-    })
-    
+function drawGrid(){
     for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
         c.moveTo(i*cellSize, startPoint);
@@ -62,11 +41,10 @@ submitButton.addEventListener('click', function(e){
         c.lineTo(endPointX, i*cellSize);
         c.strokeStyle="#C7D4CF";
         c.stroke();
-
     }
-    
-   
-    const dataToDisplay=fs.readFileSync('C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/calculatedData.csv','utf8');
+}
+
+function drawCells(dataToDisplay){
     let color="";
     let colorArray=[];
 
@@ -80,7 +58,6 @@ submitButton.addEventListener('click', function(e){
         }
     }
 
-    console.log(colorArray);
 
     let singleColor="";
     let counter=0;
@@ -93,7 +70,61 @@ submitButton.addEventListener('click', function(e){
             counter++;
         }
     }
+}
 
+function saveDataToFile(){
+    var fs=require('fs');
+    const path = require('path');
+    let string="";
+    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT;
+    fs.writeFileSync("./data.txt",string, 'utf8', function(err){
+        if(err){
+            console.log(err);
+        }
+    })
+
+    return path.resolve('./data.txt');
+
+
+}
+
+function readDataFromFile(){
+    var fs=require('fs');
+    return fs.readFileSync('./calculatedData.csv','utf8');
+}
+
+//SUBMIT DATA
+submitButton.addEventListener('click', function(e){
+    e.preventDefault();
+
+    elementsXValue=elementsX.querySelector('input[type="text"]').value;
+    elementsYValue=elementsY.querySelector('input[type="text"]').value;
+    endPointX=cellSize*elementsXValue;
+    endPointY=cellSize*elementsYValue;
+    grainsNumber=grains.querySelector('input[type="text"]').value;
+    kT=kTParameter.querySelector('input[type="text"]').value;
+
+    const path = saveDataToFile();
+
+    const { execFile } = require('child_process');
+    //const { spawn } = require('child_process');
+    //const child = spawn('pwd');
+
+
+    execFile('../ProgramCalculations/Debug/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
+        
+        console.log(error);
+        console.log(stdout);
+        console.log(stderr);
+
+        drawGrid();
+        
+        const dataToDisplay=readDataFromFile();
+    
+        drawCells(dataToDisplay);
+    })
+
+    
 
 })
 

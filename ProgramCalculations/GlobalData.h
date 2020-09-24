@@ -3,6 +3,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 
 struct GlobalData {
@@ -15,6 +16,6 @@ struct GlobalData {
 	int cellSize;
 	int germsNumber;
 	int kT;
-	GlobalData();
+	GlobalData(string path);
 	void showData();
 };

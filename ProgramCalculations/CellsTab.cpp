@@ -19,9 +19,9 @@ int xIndex = 0;
 int yIndex = 0;
 int modifiedNumber = 0;
 
-CellsTab::CellsTab() {
+CellsTab::CellsTab(string path) {
 	
-	GlobalData data;
+	GlobalData data(string path);
 
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
@@ -337,7 +337,6 @@ void CellsTab::monteCarloIteration() {
 	do {
 		vectorIndex = (rand() % cellsVector.size());
 		iterator = cellsVector.begin() + vectorIndex;
-		cout << cellsVector[vectorIndex].first << "," << cellsVector[vectorIndex].second << endl;
 		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
 		cellsVector.erase(iterator);
 		vectorIndex = 0;
