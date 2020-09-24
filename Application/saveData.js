@@ -19,30 +19,10 @@ submitButton.addEventListener('click', function(e){
 
     var fs=require('fs');
 
-    let string="";
-    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kt;
-    fs.writeFileSync("C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/data.txt",string, 'utf8', function(err){
-        if(err){
-            console.log(err);
-        }
-    })
+    
 
 
-    const dataToDisplay=fs.readFileSync('C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/calculatedData.csv','utf8');
-    let color="";
-    let colorArray=[];
-
-    for(let c of dataToDisplay){
-        if(c==="\n"){
-            colorArray.push(color);
-            color="";
-        }
-        else{
-            color+=c;
-        }
-    }
-
-   // console.log(colorArray);
+    
     
 });
 

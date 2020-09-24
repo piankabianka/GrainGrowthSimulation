@@ -25,7 +25,10 @@ CellsTab::CellsTab() {
 
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
+	germsNumber = data.germsNumber;
+	kT = data.kT;
 	modifiedCells = 0;
+
 
 
 	cellsTab = new Cell* [cellsNumberW];
@@ -89,8 +92,6 @@ bool CellsTab::checkIfColorExists(Color c) {
 
 void CellsTab::grainGrowth() {
 	srand(time(NULL));
-	GlobalData data;
-
 	do {
 
 		xIndex = (rand() % cellsNumberW);
@@ -105,10 +106,10 @@ void CellsTab::grainGrowth() {
 			}
 		}
 
-	} while (modifiedNumber < data.germsNumber);
-	
+	} while (modifiedNumber < germsNumber);
 
 }
+
 bool CellsTab::checkIfColorIsWhite(Color c) {
 	if (c.r == 255 && c.g == 255 && c.b == 255) {
 		return true;
@@ -124,7 +125,6 @@ int CellsTab::countNeighbors(int index1, int index2) {
 	if (!checkIfColorIsWhite(copyTab[index1-1][index2].color))
 		counter++;
 
-
 	if (!checkIfColorIsWhite(copyTab[index1][index2+1].color))
 		counter++;
 	
@@ -136,7 +136,6 @@ int CellsTab::countNeighbors(int index1, int index2) {
 	
 	return counter;
 }
-
 
 Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 	Color c;
@@ -264,8 +263,6 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 		}
 	}
 
-
-	GlobalData data;
 	if (counter == (cellsNumberW * cellsNumberH)) {
 		returnValue= true;
 	}
@@ -276,15 +273,15 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 }
 
 void CellsTab::calculateEnergy(int i, int j) {
-	Color c = copyTab[i + 1][j + 1].color;
+	Color c = copyTab[i+1][j+1].color;
 	Color colorRandom;
 	int energy = 0;
 	int energyRandom = 0;
 
 	int counter = 0;
 	vector <Color> colorVector;
-	int index1 = i + 1;
-	int index2 = j + 1;
+	int index1 = i+1 ;
+	int index2 = j+1 ;
 
 	Color nghbTab[4] = { copyTab[index1 - 1][index2].color, copyTab[index1][index2 + 1].color, copyTab[index1 + 1][index2].color, copyTab[index1][index2 - 1].color };
 
@@ -298,7 +295,6 @@ void CellsTab::calculateEnergy(int i, int j) {
 	if (colorVector.size() != 0) {
 		srand(time(NULL));
 		colorRandom = colorVector[(rand() % colorVector.size())];
-		GlobalData data;
 
 		for (int i = 0; i < 4; i++) {
 			if (!c.compareColors(colorRandom, nghbTab[i]))
@@ -310,7 +306,7 @@ void CellsTab::calculateEnergy(int i, int j) {
 			cellsTab[i][j].energy = energyRandom;
 		}
 		else {
-			double calculation = exp(-(energyRandom - energy) / data.kT);
+			double calculation = exp(-(energyRandom - energy) /kT);
 			double probability = (double)(rand() % 100) / 100;
 
 			if (probability <= calculation) {
@@ -319,38 +315,11 @@ void CellsTab::calculateEnergy(int i, int j) {
 			}
 		}
 	}
+	clearCopyTab();
 	
 }
 
 void CellsTab::monteCarloIteration() {
-
-	for (int i = 0; i < cellsNumberW; i++) {
-		for (int j = 0; j < cellsNumberH; j++) {
-			copyTab[i + 1][j + 1] = cellsTab[i][j];
-		}
-	}
-
-	//rogi
-
-	copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
-	copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
-	copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
-	copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
-
-	//brzegi
-
-	for (int i = 1; i < cellsNumberH + 1; i++) {
-		copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
-		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
-	}
-
-	for (int i = 1; i < cellsNumberW + 1; i++) {
-		copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
-		copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
-	}
-
-
-
 	vector<pair<int, int> > cellsVector;
 
 	for (int i = 0; i < cellsNumberW; i++) {
@@ -365,14 +334,13 @@ void CellsTab::monteCarloIteration() {
 	int vectorIndex=0;
 	auto iterator=cellsVector.begin();
 
-	
-
 	do {
 		vectorIndex = (rand() % cellsVector.size());
 		iterator = cellsVector.begin() + vectorIndex;
+		cout << cellsVector[vectorIndex].first << "," << cellsVector[vectorIndex].second << endl;
 		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
 		cellsVector.erase(iterator);
-		//cout << "W DO-WHILE: " << cellsVector.size() << endl;
+		vectorIndex = 0;
 	} while (cellsVector.size() > 0);
 
 }
@@ -380,17 +348,11 @@ void CellsTab::monteCarloIteration() {
 void CellsTab::calculations() {
 	grainGrowth();
 
-	GlobalData data;
-
 	do {
 		singleIteration();		
 	} while (!checkIfAllCellsAreModified());
 
-	showCellsTab();
 	monteCarloIteration();
-	cout << "Po MC" << endl;
-	showCellsTab();
-
 }
 
 void CellsTab::saveDataToFile() {

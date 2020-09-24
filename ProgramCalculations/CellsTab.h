@@ -12,6 +12,8 @@ struct CellsTab {
 	int cellsNumberW;
 	int cellsNumberH;
 	int modifiedCells;
+	int germsNumber;
+	int kT;
 	
 
 	CellsTab();

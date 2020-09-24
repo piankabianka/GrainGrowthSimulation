@@ -11,7 +11,6 @@ GlobalData::GlobalData() {
 	file.open("data.txt");
 
 	if (file.good()) {
-		cout << "plik ok" << endl;
 		while (!file.eof()) {
 			file >> width;
 			file >> height;

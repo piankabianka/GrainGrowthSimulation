@@ -1,4 +1,4 @@
-const data = require('./saveData.js');
+
 //CANVAS
 const canvas=document.querySelector('canvas');
 canvas.width=window.innerWidth;
@@ -14,7 +14,7 @@ let elementsXValue=undefined;
 const elementsY=document.querySelector('#nodesY');
 let elementsYValue=undefined;
 
-const cellSize=20;
+const cellSize=5;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -39,6 +39,14 @@ submitButton.addEventListener('click', function(e){
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
 
+    var fs=require('fs');
+    let string="";
+    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT;
+    fs.writeFileSync("C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/data.txt",string, 'utf8', function(err){
+        if(err){
+            console.log(err);
+        }
+    })
     
     for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
@@ -54,7 +62,38 @@ submitButton.addEventListener('click', function(e){
         c.lineTo(endPointX, i*cellSize);
         c.strokeStyle="#C7D4CF";
         c.stroke();
+
     }
+    
+   
+    const dataToDisplay=fs.readFileSync('C:/Users/Bianka/Desktop/Moja nauka/Materiały do inżynierki/Kody/GrainGrowthSimulation/ProgramCalculations/Debug/calculatedData.csv','utf8');
+    let color="";
+    let colorArray=[];
+
+    for(let c of dataToDisplay){
+        if(c==="\n"){
+            colorArray.push(color);
+            color="";
+        }
+        else{
+            color+=c;
+        }
+    }
+
+    console.log(colorArray);
+
+    let singleColor="";
+    let counter=0;
+
+    for(let i=startPoint+1; i<endPointY; i+=cellSize){
+        for(let j=startPoint+1; j<endPointX; j+=cellSize){
+            singleColor="rgb("+colorArray[counter]+")";
+            c.fillStyle=singleColor;
+            c.fillRect(j,i,cellSize-1, cellSize-1);
+            counter++;
+        }
+    }
+
 
 })
 

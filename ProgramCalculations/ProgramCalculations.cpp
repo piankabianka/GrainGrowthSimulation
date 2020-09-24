@@ -10,13 +10,8 @@ using namespace std;
 
 
 int main()
-{
-	//GlobalData data;
-	//data.showData();
-	CellsTab cellsTab;
+{	CellsTab cellsTab;
 	
-	cout << "POCZATKOWA TABELA KOMOREK" << endl;
-	cout << endl;
 	cellsTab.calculations();
 	cellsTab.saveDataToFile();
 
