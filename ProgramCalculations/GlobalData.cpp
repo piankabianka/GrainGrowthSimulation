@@ -5,8 +5,6 @@
 #include <string>
 using namespace std;
 
-
-
 GlobalData::GlobalData(string path) {
 	fstream file;
 	file.open(path);

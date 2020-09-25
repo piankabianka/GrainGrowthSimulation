@@ -7,6 +7,7 @@ const c=canvas.getContext('2d');
 
 
 const submitButton=document.querySelector('#submit');
+const stepButton=document.querySelector('#step');
 
 const elementsX=document.querySelector('#nodesX');
 let elementsXValue=undefined;
@@ -14,7 +15,7 @@ let elementsXValue=undefined;
 const elementsY=document.querySelector('#nodesY');
 let elementsYValue=undefined;
 
-const cellSize=10;
+const cellSize=8;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -25,6 +26,8 @@ let grainsNumber=undefined;
 const kTParameter=document.querySelector('#kTParameter');
 let kT=undefined;
 
+let dataToDisplay=undefined;
+let counter=0;
 
 function drawGrid(){
     for(let i=0; i<=elementsXValue; i++){
@@ -49,18 +52,20 @@ function drawCells(dataToDisplay){
     let colorArray=[];
 
     for(let c of dataToDisplay){
-        if(c==="\n"){
+        if(c===";"){
             colorArray.push(color);
             color="";
+        }
+        else if(c==="\n"){
+            console.log();
         }
         else{
             color+=c;
         }
     }
 
-
     let singleColor="";
-    let counter=0;
+    
 
     for(let i=startPoint+1; i<endPointY; i+=cellSize){
         for(let j=startPoint+1; j<endPointX; j+=cellSize){
@@ -107,19 +112,14 @@ submitButton.addEventListener('click', function(e){
     const path = saveDataToFile();
 
     const { execFile } = require('child_process');
-    //const { spawn } = require('child_process');
-    //const child = spawn('pwd');
 
 
-    execFile('../ProgramCalculations/Debug/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
+    execFile('../ProgramCalculations/Release/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
         
-        console.log(error);
-        console.log(stdout);
-        console.log(stderr);
 
         drawGrid();
         
-        const dataToDisplay=readDataFromFile();
+        dataToDisplay=readDataFromFile();
     
         drawCells(dataToDisplay);
     })
@@ -128,4 +128,8 @@ submitButton.addEventListener('click', function(e){
 
 })
 
-    
+stepButton.addEventListener('click', function(e){
+    e.preventDefault();
+
+    drawCells(dataToDisplay);
+})

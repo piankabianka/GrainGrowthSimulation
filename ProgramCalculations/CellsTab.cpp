@@ -21,8 +21,8 @@ int modifiedNumber = 0;
 
 CellsTab::CellsTab(string path) {
 	
-	GlobalData data(string path);
-
+	GlobalData data(path);
+	
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
 	germsNumber = data.germsNumber;
@@ -249,7 +249,7 @@ void CellsTab::singleIteration() {
 	}
 
 	clearCopyTab();
-	
+	saveDataToFile();
 }
 
 bool CellsTab:: checkIfAllCellsAreModified() {
@@ -273,7 +273,8 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 }
 
 void CellsTab::calculateEnergy(int i, int j) {
-	Color c = copyTab[i+1][j+1].color;
+
+	Color c = cellsTab[i][j].color;
 	Color colorRandom;
 	int energy = 0;
 	int energyRandom = 0;
@@ -283,16 +284,23 @@ void CellsTab::calculateEnergy(int i, int j) {
 	int index1 = i+1 ;
 	int index2 = j+1 ;
 
+
 	Color nghbTab[4] = { copyTab[index1 - 1][index2].color, copyTab[index1][index2 + 1].color, copyTab[index1 + 1][index2].color, copyTab[index1][index2 - 1].color };
+	
+	cout << "Sasiedzi dla tej komorki to: " << endl;
+	for (int i = 0; i < 4; i++) {
+		cout << nghbTab[i].r << "," << nghbTab[i].g << "," << nghbTab[i].b << endl;
+	}
 
 	for (int i = 0; i < 4; i++) {
 		if (!c.compareColors(c, nghbTab[i])) {
 			energy++;
 			colorVector.push_back(nghbTab[i]);
-		}	
+		}
 	}
 
 	if (colorVector.size() != 0) {
+		
 		srand(time(NULL));
 		colorRandom = colorVector[(rand() % colorVector.size())];
 
@@ -302,7 +310,9 @@ void CellsTab::calculateEnergy(int i, int j) {
 		}
 
 		if (energyRandom <= energy) {
+			cout << "komorka zmieniona" << endl;
 			cellsTab[i][j].color = colorRandom;
+			cout << colorRandom.r << " " << colorRandom.g << " " << colorRandom.b << endl;
 			cellsTab[i][j].energy = energyRandom;
 		}
 		else {
@@ -310,24 +320,71 @@ void CellsTab::calculateEnergy(int i, int j) {
 			double probability = (double)(rand() % 100) / 100;
 
 			if (probability <= calculation) {
+				cout << "komorka zmieniona p" << endl;
 				cellsTab[i][j].color = colorRandom;
+				cout << colorRandom.r << " " << colorRandom.g << " " << colorRandom.b << endl;
 				cellsTab[i][j].energy = energyRandom;
 			}
 		}
+		cout << endl;
 	}
-	clearCopyTab();
+	//clearCopyTab();
 	
 }
 
 void CellsTab::monteCarloIteration() {
+
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			copyTab[i + 1][j + 1] = cellsTab[i][j];
+		}
+	}
+
+	//rogi
+
+	copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
+	copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
+	copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
+	copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
+
+	//brzegi
+
+	for (int i = 1; i < cellsNumberH + 1; i++) {
+		copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
+		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
+	}
+
+	for (int i = 1; i < cellsNumberW + 1; i++) {
+		copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
+		copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
+	}
+	cout << "TABLICA KOMOREK:" << endl;
+	showCellsTab();
+	cout << "KOPIA TABLICA KOMOREK:" << endl;
+
+	for (int i = 0; i < cellsNumberW + 2; i++) {
+		for (int j = 0; j < cellsNumberH+1; j++) {
+			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
+			cout << "\t";
+		}
+		cout << endl;
+	}
+
+	cout << "wywolano MC: " << endl;
 	vector<pair<int, int> > cellsVector;
 
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
+			
 			pair<int, int> index(i, j);
 			cellsVector.push_back(index);
 		}
 	}
+	
+
+	auto it= cellsVector.begin();
+
+	
 
 	srand(time(NULL));
 	
@@ -338,32 +395,48 @@ void CellsTab::monteCarloIteration() {
 		vectorIndex = (rand() % cellsVector.size());
 		iterator = cellsVector.begin() + vectorIndex;
 		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
+		//iterator += vectorIndex;
+		
+		cout << "rozmiar wektora " << cellsVector.size() << " wylosowany indeks:" << cellsVector[vectorIndex].first <<","<< cellsVector[vectorIndex].second<<" indeks wektora: "<<vectorIndex<< endl;
+		vectorIndex = 0;
+
+		/*for (int i = 0; i < cellsVector.size(); i++) {
+			cout << cellsVector[i].first << "," << cellsVector[i].second << endl;
+		}*/
 		cellsVector.erase(iterator);
 		vectorIndex = 0;
+		
 	} while (cellsVector.size() > 0);
-
 }
 
 void CellsTab::calculations() {
 	grainGrowth();
-
+	saveDataToFile();
 	do {
-		singleIteration();		
+		singleIteration();	
+		
 	} while (!checkIfAllCellsAreModified());
 
+	
+
 	monteCarloIteration();
+	cout << "MC: " << endl;
+	
+	saveDataToFile();
+	
 }
 
 void CellsTab::saveDataToFile() {
-	ofstream saveData("calculatedData.csv");
+	ofstream saveData("calculatedData.csv", ios::app);
 
-
+	saveData << "\n";
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
 			saveData << cellsTab[i][j].color.r << ",";
 			saveData << cellsTab[i][j].color.g << ",";
-			saveData << cellsTab[i][j].color.b << "\n";
+			saveData << cellsTab[i][j].color.b << ";";
 		}
 	}
+	
 	saveData.close();
 }
