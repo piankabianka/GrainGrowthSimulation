@@ -8,6 +8,7 @@ const c=canvas.getContext('2d');
 
 const submitButton=document.querySelector('#submit');
 const stepButton=document.querySelector('#step');
+const removeButton=document.querySelector('#remove');
 
 const elementsX=document.querySelector('#nodesX');
 let elementsXValue=undefined;
@@ -132,4 +133,26 @@ stepButton.addEventListener('click', function(e){
     e.preventDefault();
 
     drawCells(dataToDisplay);
+})
+
+removeButton.addEventListener('click', function(e){
+    e.preventDefault();
+
+    elementsX.querySelector('input[type="text"]').value="";
+    elementsY.querySelector('input[type="text"]').value="";
+    grains.querySelector('input[type="text"]').value="";
+    kTParameter.querySelector('input[type="text"]').value="";
+
+    const fs = require('fs')
+
+    const path = './calculatedData.csv'
+
+    try {
+    fs.unlinkSync(path)
+    //file removed
+    } catch(err) {
+    console.error(err)
+    }
+
+    c.clearRect(0, 0, canvas.width, canvas.height);
 })

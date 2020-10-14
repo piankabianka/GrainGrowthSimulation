@@ -14,7 +14,7 @@ struct CellsTab {
 	int cellsNumberH;
 	int modifiedCells;
 	int germsNumber;
-	int kT;
+	double kT;
 	
 
 	CellsTab(string path);
@@ -23,6 +23,7 @@ struct CellsTab {
 	void singleIteration();
 	void monteCarloIteration();
 	void calculations();
+	void copyCellTabToCopyTab();
 	void clearCopyTab();
 
 	bool checkIfColorExists(Color c);

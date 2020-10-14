@@ -15,7 +15,7 @@ struct GlobalData {
 	int totalElementNumber;
 	int cellSize;
 	int germsNumber;
-	int kT;
+	double kT;
 	GlobalData(string path);
 	void showData();
 };

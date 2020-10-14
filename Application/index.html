@@ -20,6 +20,20 @@
                   <li class="input" id="kTParameter">
                     <input type="text" placeholder="parametr kT" />
                   </li>
+                  <li class="select-condition">
+                    <label for="border-conditions">Warunki brzegowe</label>
+                      <select id="border-conditions">
+                        <option value="Periodic-BC">1. Periodyczne</option>
+                        <option value="Absorbable-BC">2. Absorbujące</option>
+                      </select>
+                  </li>
+                  <li class="select-condition">
+                    <label for="neighbourhood-type">Rodzaj sąsiedztwa</label>
+                      <select id="neighbourhood-type">
+                        <option value="Neumann">1. Neumann</option>
+                        <option value="Moore">2. Moore</option>
+                      </select>
+                  </li>
                   <li>
                       <button class="button" id="submit">ZATWIERDŹ</button>
                   </li>
@@ -27,7 +41,7 @@
                     <button class="button" id="step">KROK</button>
                   </li>
                   <li>
-                    <button class="button">WYCZYŚĆ</button>
+                    <button class="button" id="remove">WYCZYŚĆ</button>
                   </li>
               </ul>
         </nav>

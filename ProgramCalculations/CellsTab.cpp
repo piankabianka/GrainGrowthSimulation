@@ -29,8 +29,6 @@ CellsTab::CellsTab(string path) {
 	kT = data.kT;
 	modifiedCells = 0;
 
-
-
 	cellsTab = new Cell* [cellsNumberW];
 
 	for (int i = 0; i < cellsNumberW; i++) {
@@ -191,11 +189,12 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		for (int i = 0; i < 4; i++) {
 			if (!checkIfColorIsWhite(colorTab[i])) {
 				c = colorTab[i];
+				modifiedNumber++;
 				break;
 			}
 		}
 
-		modifiedCells++;
+		
 	}
 	return c;
 }
@@ -208,12 +207,11 @@ void CellsTab::clearCopyTab() {
 	}
 }
 
-void CellsTab::singleIteration() {
-	
+void CellsTab::copyCellTabToCopyTab() {
 	//srodek tablicy
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
-			copyTab[i+1][j+1] = cellsTab[i][j];
+			copyTab[i + 1][j + 1] = cellsTab[i][j];
 		}
 	}
 
@@ -226,16 +224,20 @@ void CellsTab::singleIteration() {
 
 	//brzegi
 
-	for (int i = 1; i < cellsNumberH+1; i++) {
-		copyTab[0][i] = cellsTab[cellsNumberW - 1][i-1];
+	for (int i = 1; i < cellsNumberH + 1; i++) {
+		copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
 		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
 	}
 
-	for (int i = 1; i < cellsNumberW+1; i++) {
-		copyTab[i][0] = cellsTab[i-1][cellsNumberH - 1];
-		copyTab[i][cellsNumberH+1] = cellsTab[i-1][0];
+	for (int i = 1; i < cellsNumberW + 1; i++) {
+		copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
+		copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
 	}
+}
 
+void CellsTab::singleIteration() {
+	
+	copyCellTabToCopyTab();
 
 	//w³asciwa iteracja i zliczanie s¹siadów
 	
@@ -274,23 +276,16 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 
 void CellsTab::calculateEnergy(int i, int j) {
 
-	Color c = cellsTab[i][j].color;
+	Color c = copyTab[i+1][j+1].color;
 	Color colorRandom;
 	int energy = 0;
 	int energyRandom = 0;
-
 	int counter = 0;
 	vector <Color> colorVector;
-	int index1 = i+1 ;
-	int index2 = j+1 ;
 
 
-	Color nghbTab[4] = { copyTab[index1 - 1][index2].color, copyTab[index1][index2 + 1].color, copyTab[index1 + 1][index2].color, copyTab[index1][index2 - 1].color };
+	Color nghbTab[4] = { copyTab[i][j+1].color, copyTab[i+1][j+2].color, copyTab[i+2][j+1].color, copyTab[i+1][j].color };
 	
-	cout << "Sasiedzi dla tej komorki to: " << endl;
-	for (int i = 0; i < 4; i++) {
-		cout << nghbTab[i].r << "," << nghbTab[i].g << "," << nghbTab[i].b << endl;
-	}
 
 	for (int i = 0; i < 4; i++) {
 		if (!c.compareColors(c, nghbTab[i])) {
@@ -298,6 +293,7 @@ void CellsTab::calculateEnergy(int i, int j) {
 			colorVector.push_back(nghbTab[i]);
 		}
 	}
+
 
 	if (colorVector.size() != 0) {
 		
@@ -308,84 +304,40 @@ void CellsTab::calculateEnergy(int i, int j) {
 			if (!c.compareColors(colorRandom, nghbTab[i]))
 				energyRandom++;
 		}
+		
+		if (energyRandom < energy) {
 
-		if (energyRandom <= energy) {
-			cout << "komorka zmieniona" << endl;
-			cellsTab[i][j].color = colorRandom;
-			cout << colorRandom.r << " " << colorRandom.g << " " << colorRandom.b << endl;
-			cellsTab[i][j].energy = energyRandom;
+			copyTab[i+1][j+1].color = colorRandom;
+			copyTab[i + 1][j + 1].energy = energyRandom;
 		}
 		else {
 			double calculation = exp(-(energyRandom - energy) /kT);
 			double probability = (double)(rand() % 100) / 100;
 
 			if (probability <= calculation) {
-				cout << "komorka zmieniona p" << endl;
-				cellsTab[i][j].color = colorRandom;
-				cout << colorRandom.r << " " << colorRandom.g << " " << colorRandom.b << endl;
-				cellsTab[i][j].energy = energyRandom;
+
+				copyTab[i + 1][j + 1].color = colorRandom;
+				copyTab[i + 1][j + 1].energy = energyRandom;
 			}
 		}
-		cout << endl;
 	}
-	//clearCopyTab();
 	
 }
 
 void CellsTab::monteCarloIteration() {
 
-	for (int i = 0; i < cellsNumberW; i++) {
-		for (int j = 0; j < cellsNumberH; j++) {
-			copyTab[i + 1][j + 1] = cellsTab[i][j];
-		}
-	}
+	copyCellTabToCopyTab();
 
-	//rogi
-
-	copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
-	copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
-	copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
-	copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
-
-	//brzegi
-
-	for (int i = 1; i < cellsNumberH + 1; i++) {
-		copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
-		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
-	}
-
-	for (int i = 1; i < cellsNumberW + 1; i++) {
-		copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
-		copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
-	}
-	cout << "TABLICA KOMOREK:" << endl;
-	showCellsTab();
-	cout << "KOPIA TABLICA KOMOREK:" << endl;
-
-	for (int i = 0; i < cellsNumberW + 2; i++) {
-		for (int j = 0; j < cellsNumberH+1; j++) {
-			cout << copyTab[i][j].color.r << ' ' << copyTab[i][j].color.g << ' ' << copyTab[i][j].color.b;
-			cout << "\t";
-		}
-		cout << endl;
-	}
-
-	cout << "wywolano MC: " << endl;
 	vector<pair<int, int> > cellsVector;
 
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
-			
 			pair<int, int> index(i, j);
 			cellsVector.push_back(index);
 		}
 	}
-	
 
 	auto it= cellsVector.begin();
-
-	
-
 	srand(time(NULL));
 	
 	int vectorIndex=0;
@@ -394,15 +346,9 @@ void CellsTab::monteCarloIteration() {
 	do {
 		vectorIndex = (rand() % cellsVector.size());
 		iterator = cellsVector.begin() + vectorIndex;
-		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
-		//iterator += vectorIndex;
 		
-		cout << "rozmiar wektora " << cellsVector.size() << " wylosowany indeks:" << cellsVector[vectorIndex].first <<","<< cellsVector[vectorIndex].second<<" indeks wektora: "<<vectorIndex<< endl;
-		vectorIndex = 0;
+		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
 
-		/*for (int i = 0; i < cellsVector.size(); i++) {
-			cout << cellsVector[i].first << "," << cellsVector[i].second << endl;
-		}*/
 		cellsVector.erase(iterator);
 		vectorIndex = 0;
 		
@@ -412,15 +358,21 @@ void CellsTab::monteCarloIteration() {
 void CellsTab::calculations() {
 	grainGrowth();
 	saveDataToFile();
+
 	do {
 		singleIteration();	
 		
-	} while (!checkIfAllCellsAreModified());
+	} while (modifiedNumber<(cellsNumberW*cellsNumberH));
 
-	
 
 	monteCarloIteration();
-	cout << "MC: " << endl;
+	
+
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			cellsTab[i][j] = copyTab[i + 1][j + 1];
+		}
+	}
 	
 	saveDataToFile();
 	
