@@ -21,6 +21,7 @@ body{
     color:whitesmoke;
     padding:5px;
     font-family: 'Courier New', Courier, monospace;
+    width:160px;
 }
 
 
@@ -47,6 +48,9 @@ select{
 
 /*BUTTONS*/
 
+#navigation .button-width{
+    width:100px;
+}
 .button{
     background-color:#c7d4cf96;
     border: 1px solid #ccc;
