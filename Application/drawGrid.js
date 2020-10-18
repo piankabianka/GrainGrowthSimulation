@@ -27,6 +27,12 @@ let grainsNumber=undefined;
 const kTParameter=document.querySelector('#kTParameter');
 let kT=undefined;
 
+let borderConditionValue=undefined;
+let nghbValue=undefined;
+
+let bc=undefined;
+let nghb=undefined;
+
 let dataToDisplay=undefined;
 let counter=0;
 
@@ -82,7 +88,7 @@ function saveDataToFile(){
     var fs=require('fs');
     const path = require('path');
     let string="";
-    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT;
+    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT+"\n"+bc+"\n"+nghb;
     fs.writeFileSync("./data.txt",string, 'utf8', function(err){
         if(err){
             console.log(err);
@@ -109,6 +115,25 @@ submitButton.addEventListener('click', function(e){
     endPointY=cellSize*elementsYValue;
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
+
+    borderConditionValue=document.querySelector('#border-conditions option:checked').value
+    
+
+    nghbValue=document.querySelector('#neighbourhood-type option:checked').value
+    
+    if(borderConditionValue=='Periodic'){
+        bc=1;
+    }
+    if(borderConditionValue=='Absorbable'){
+        bc=2;
+    }
+
+    if(nghbValue=='Neumann'){
+        nghb=1;
+    }
+    if(nghbValue=='Moore'){
+        nghb=2;
+    }
 
     const path = saveDataToFile();
 

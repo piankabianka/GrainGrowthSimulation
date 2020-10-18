@@ -27,6 +27,8 @@ CellsTab::CellsTab(string path) {
 	cellsNumberH = data.width;
 	germsNumber = data.germsNumber;
 	kT = data.kT;
+	bc = data.bc;
+	nghb = data.nghb;
 	modifiedCells = 0;
 
 	cellsTab = new Cell* [cellsNumberW];
@@ -215,24 +217,49 @@ void CellsTab::copyCellTabToCopyTab() {
 		}
 	}
 
-	//rogi
+	if (bc == 1) {
+		//rogi
 
-	copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
-	copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
-	copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
-	copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
+		copyTab[0][0] = cellsTab[cellsNumberW - 1][cellsNumberH - 1];
+		copyTab[cellsNumberW + 1][cellsNumberH + 1] = cellsTab[0][0];
+		copyTab[0][cellsNumberH + 1] = cellsTab[cellsNumberW - 1][0];
+		copyTab[cellsNumberW + 1][0] = cellsTab[0][cellsNumberH - 1];
 
-	//brzegi
+		//brzegi
 
-	for (int i = 1; i < cellsNumberH + 1; i++) {
-		copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
-		copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
+		for (int i = 1; i < cellsNumberH + 1; i++) {
+			copyTab[0][i] = cellsTab[cellsNumberW - 1][i - 1];
+			copyTab[cellsNumberW + 1][i] = cellsTab[0][i - 1];
+		}
+
+		for (int i = 1; i < cellsNumberW + 1; i++) {
+			copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
+			copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
+		}
 	}
 
-	for (int i = 1; i < cellsNumberW + 1; i++) {
-		copyTab[i][0] = cellsTab[i - 1][cellsNumberH - 1];
-		copyTab[i][cellsNumberH + 1] = cellsTab[i - 1][0];
-	}
+	/*if(bc==2){
+		//rogi
+
+		copyTab[0][0] = new Cell();
+		copyTab[cellsNumberW + 1][cellsNumberH + 1] = new Cell();
+		copyTab[0][cellsNumberH + 1] = new Cell();
+		copyTab[cellsNumberW + 1][0] = new Cell();
+
+		//brzegi
+
+		for (int i = 1; i < cellsNumberH + 1; i++) {
+			copyTab[0][i] = new Cell();
+			copyTab[cellsNumberW + 1][i] = new Cell();
+		}
+
+		for (int i = 1; i < cellsNumberW + 1; i++) {
+			copyTab[i][0] = new Cell();
+			copyTab[i][cellsNumberH + 1] = new Cell();
+		}
+	}*/
+
+	
 }
 
 void CellsTab::singleIteration() {
@@ -288,7 +315,7 @@ void CellsTab::calculateEnergy(int i, int j) {
 	
 
 	for (int i = 0; i < 4; i++) {
-		if (!c.compareColors(c, nghbTab[i])) {
+		if (!c.compareColors(c, nghbTab[i]) && !checkIfColorIsWhite(nghbTab[i])) {
 			energy++;
 			colorVector.push_back(nghbTab[i]);
 		}

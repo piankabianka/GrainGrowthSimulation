@@ -15,6 +15,8 @@ struct CellsTab {
 	int modifiedCells;
 	int germsNumber;
 	double kT;
+	int bc;
+	int nghb;
 	
 
 	CellsTab(string path);

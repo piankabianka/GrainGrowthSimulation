@@ -16,6 +16,8 @@ GlobalData::GlobalData(string path) {
 			file >> height;
 			file >> germsNumber;
 			file >> kT;
+			file >> bc;
+			file >> nghb;
 		}
 
 	nodesNumberH = width + 1;
