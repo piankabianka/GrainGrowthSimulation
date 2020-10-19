@@ -119,6 +119,8 @@ bool CellsTab::checkIfColorIsWhite(Color c) {
 	}
 }
 
+
+//TUTEJ SIE LICZO SOMSIEDZI
 int CellsTab::countNeighbors(int index1, int index2) {
 	int counter = 0;
 
@@ -133,32 +135,68 @@ int CellsTab::countNeighbors(int index1, int index2) {
 	
 	if (!checkIfColorIsWhite(copyTab[index1][index2-1].color))
 		counter++;
+
+	if (nghb == 2) {
+		if (!checkIfColorIsWhite(copyTab[index1 - 1][index2 - 1].color))
+			counter++;
+
+		if (!checkIfColorIsWhite(copyTab[index1 + 1][index2 + 1].color))
+			counter++;
+
+		if (!checkIfColorIsWhite(copyTab[index1 + 1][index2 - 1].color))
+			counter++;
+
+		if (!checkIfColorIsWhite(copyTab[index1 - 1][index2 + 1].color))
+			counter++;
+	}
 	
 	return counter;
 }
 
+//TUTEJ SIE LICZO SOMSIEDZI
 Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 	Color c;
 	
 	if(nghbCounter!=0) {
 
-		Color colorTab[4];
+		int tmp;
+		Color tmpColor;
+
+		int nghbNumber;
+		if (nghb == 1) nghbNumber = 4;
+		if (nghb == 2) nghbNumber = 8;
+
+		
+		//Color colorTab[4];
+		Color* colorTab = new Color[nghbNumber];
 
 		colorTab[0] = copyTab[indexI - 1][indexJ].color;
 		colorTab[1] = copyTab[indexI][indexJ + 1].color;
 		colorTab[2] = copyTab[indexI + 1][indexJ].color;
 		colorTab[3] = copyTab[indexI][indexJ - 1].color;
 
+		if (nghbNumber == 8) {
+			colorTab[4] = copyTab[indexI - 1][indexJ-1].color;
+			colorTab[5] = copyTab[indexI+1][indexJ + 1].color;
+			colorTab[6] = copyTab[indexI + 1][indexJ-1].color;
+			colorTab[7] = copyTab[indexI-1][indexJ +1].color;
+		}
+
 		int c1 = 0;
 		int c2 = 0;
 		int c3 = 0;
 		int c4 = 0;
+		int c5 = 0;
+		int c6 = 0;
+		int c7 = 0;
+		int c8 = 0;
+		
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < nghbNumber; i++) {
 			if (c.compareColors(colorTab[i], colorTab[0])) {
 				c1++;
 			}
-			if (c.compareColors(colorTab[i] ,colorTab[1])) {
+			if (c.compareColors(colorTab[i], colorTab[1])) {
 				c2++;
 			}
 			if (c.compareColors(colorTab[i], colorTab[2])) {
@@ -167,14 +205,35 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			if (c.compareColors(colorTab[i], colorTab[3])) {
 				c4++;
 			}
+			if (nghbNumber == 8) {
+				if (c.compareColors(colorTab[i], colorTab[4])) {
+					c5++;
+				}
+				if (c.compareColors(colorTab[i], colorTab[5])) {
+					c6++;
+				}
+				if (c.compareColors(colorTab[i], colorTab[6])) {
+					c7++;
+				}
+				if (c.compareColors(colorTab[i], colorTab[7])) {
+					c8++;
+				}
+			}
 		}
 
-		int counterTab[4] = { c1, c2, c3, c4 };
-		int tmp;
-		Color tmpColor;
+		//
+		int* counterTab = new int[nghbNumber];
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = i + 1; j < 4; j++) {
+		if (nghbNumber == 4) {
+			int counterTab[4] = { c1, c2, c3, c4 };
+		}
+		if (nghbNumber == 8) {
+			int counterTab[8] = { c1, c2, c3, c4,c5,c6,c7,c8 };
+		}
+			
+
+		for (int i = 0; i < nghbNumber; i++) {
+			for (int j = i + 1; j < nghbNumber; j++) {
 				if (counterTab[i] > counterTab[j]) {
 					tmp = counterTab[i];
 					tmpColor = colorTab[i];
@@ -188,7 +247,7 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			}
 		}
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < nghbNumber; i++) {
 			if (!checkIfColorIsWhite(colorTab[i])) {
 				c = colorTab[i];
 				modifiedNumber++;
@@ -196,8 +255,8 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			}
 		}
 
-		
 	}
+		
 	return c;
 }
 
@@ -301,6 +360,7 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 	return returnValue;
 }
 
+//TUTEJ SIE LICZO SOMSIEDZI
 void CellsTab::calculateEnergy(int i, int j) {
 
 	Color c = copyTab[i+1][j+1].color;
