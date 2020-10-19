@@ -36,6 +36,9 @@ let nghb=undefined;
 let dataToDisplay=undefined;
 let counter=0;
 
+const temperatureOption=document.querySelector("#temperature-option");
+const siteNav=document.querySelector('#site-navigation');
+
 function drawGrid(){
     for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
@@ -161,6 +164,7 @@ stepButton.addEventListener('click', function(e){
 })
 
 removeButton.addEventListener('click', function(e){
+
     e.preventDefault();
 
     elementsX.querySelector('input[type="text"]').value="";
@@ -180,4 +184,17 @@ removeButton.addEventListener('click', function(e){
     }
 
     c.clearRect(0, 0, canvas.width, canvas.height);
+})
+
+temperatureOption.addEventListener('click', function(e){
+    
+    if(e.target.checked){
+        siteNav.classList.add("show");
+        console.log("show");
+    }
+    else{
+        siteNav.classList.remove("show");
+        console.log("no show");
+    }
+
 })
