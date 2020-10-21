@@ -30,6 +30,10 @@ CellsTab::CellsTab(string path) {
 	bc = data.bc;
 	nghb = data.nghb;
 	modifiedCells = 0;
+	t1 = data.t1;
+	t2 = data.t2;
+	t3 = data.t3;
+	t4 = data.t4;
 
 	cellsTab = new Cell* [cellsNumberW];
 
@@ -119,8 +123,6 @@ bool CellsTab::checkIfColorIsWhite(Color c) {
 	}
 }
 
-
-//TUTEJ SIE LICZO SOMSIEDZI
 int CellsTab::countNeighbors(int index1, int index2) {
 	int counter = 0;
 
@@ -153,7 +155,6 @@ int CellsTab::countNeighbors(int index1, int index2) {
 	return counter;
 }
 
-//TUTEJ SIE LICZO SOMSIEDZI
 Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 	Color c;
 	
@@ -166,8 +167,6 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		if (nghb == 1) nghbNumber = 4;
 		if (nghb == 2) nghbNumber = 8;
 
-		
-		//Color colorTab[4];
 		Color* colorTab = new Color[nghbNumber];
 
 		colorTab[0] = copyTab[indexI - 1][indexJ].color;
@@ -221,7 +220,6 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			}
 		}
 
-		//
 		int* counterTab = new int[nghbNumber];
 
 		if (nghbNumber == 4) {
@@ -254,7 +252,6 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 				break;
 			}
 		}
-
 	}
 		
 	return c;
@@ -324,8 +321,6 @@ void CellsTab::copyCellTabToCopyTab() {
 void CellsTab::singleIteration() {
 	
 	copyCellTabToCopyTab();
-
-	//w³asciwa iteracja i zliczanie s¹siadów
 	
 	for (int i = 1; i < cellsNumberW + 1; i++) {
 		for (int j = 1; j < cellsNumberH + 1; j++) {
@@ -360,7 +355,6 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 	return returnValue;
 }
 
-//TUTEJ SIE LICZO SOMSIEDZI
 void CellsTab::calculateEnergy(int i, int j) {
 
 	Color c = copyTab[i+1][j+1].color;
@@ -452,7 +446,12 @@ void CellsTab::calculations() {
 	} while (modifiedNumber<(cellsNumberW*cellsNumberH));
 
 
-	monteCarloIteration();
+	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
+		monteCarloIteration(); //WERSJA BEZ TEMPERATURY
+	}
+	else {
+		cout << "Monte carlo z temperatura" << endl; //WERSJA Z TEMPERATURA
+	}
 	
 
 	for (int i = 0; i < cellsNumberW; i++) {

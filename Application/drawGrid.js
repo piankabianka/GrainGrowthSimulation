@@ -39,6 +39,16 @@ let counter=0;
 const temperatureOption=document.querySelector("#temperature-option");
 const siteNav=document.querySelector('#site-navigation');
 
+let temperatureInfluence=false;
+const t1=document.querySelector('#t1');
+const t2=document.querySelector('#t2');
+const t3=document.querySelector('#t3');
+const t4=document.querySelector('#t4');
+let temp1;
+let temp2;
+let temp3;
+let temp4;
+
 function drawGrid(){
     for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
@@ -92,6 +102,11 @@ function saveDataToFile(){
     const path = require('path');
     let string="";
     string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT+"\n"+bc+"\n"+nghb;
+
+  
+    string+="\n"+temp1+"\n"+temp2+"\n"+temp3+"\n"+temp4;
+
+
     fs.writeFileSync("./data.txt",string, 'utf8', function(err){
         if(err){
             console.log(err);
@@ -138,6 +153,21 @@ submitButton.addEventListener('click', function(e){
         nghb=2;
     }
 
+    
+
+    if(temperatureInfluence){
+        temp1=t1.querySelector('input[type="text"]').value;
+        temp2=t2.querySelector('input[type="text"]').value;
+        temp3=t3.querySelector('input[type="text"]').value;
+        temp4=t4.querySelector('input[type="text"]').value;        
+    }else{
+        temp1=-1;
+        temp2=-1;
+        temp3=-1;
+        temp4=-1;
+    }
+    
+
     const path = saveDataToFile();
 
     const { execFile } = require('child_process');
@@ -145,7 +175,6 @@ submitButton.addEventListener('click', function(e){
 
     execFile('../ProgramCalculations/Release/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
         
-
         drawGrid();
         
         dataToDisplay=readDataFromFile();
@@ -190,11 +219,11 @@ temperatureOption.addEventListener('click', function(e){
     
     if(e.target.checked){
         siteNav.classList.add("show");
-        console.log("show");
+        temperatureInfluence=true;
     }
     else{
         siteNav.classList.remove("show");
-        console.log("no show");
+        temperatureInfluence=false;
     }
 
 })

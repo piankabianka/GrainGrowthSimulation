@@ -18,6 +18,10 @@ GlobalData::GlobalData(string path) {
 			file >> kT;
 			file >> bc;
 			file >> nghb;
+			file >> t1;
+			file >> t2;
+			file >> t3;
+			file >> t4;
 		}
 
 	nodesNumberH = width + 1;
