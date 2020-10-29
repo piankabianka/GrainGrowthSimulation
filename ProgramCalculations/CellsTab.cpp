@@ -436,6 +436,43 @@ void CellsTab::monteCarloIteration() {
 	} while (cellsVector.size() > 0);
 }
 
+double calculateCoordinate(int position, int range) {
+
+	return ((2 * position - range) / range);
+}
+
+double CellsTab::getTemperatureForCell(double ksi, double eta) {
+
+	double t=0;
+
+	t = (1 - ksi)*(1 - eta) * t1/4;
+	t += (1 - ksi)*(1 + eta) * t4/4;
+	t +=(1 + ksi)*(1 + eta) * t3/4;
+	t += (1 + ksi)*(1 - eta) * t2/4;
+	
+
+	return t;
+
+}
+
+void CellsTab::calculateTemperatureForEveryCell() {
+	double ksi;
+	double eta;
+
+	for (int i = 1; i < cellsNumberH+1; i++) {
+		for (int j = 1; j<cellsNumberW+1; j++) {
+			ksi = (2 * (double)j - 1 - cellsNumberH) / (cellsNumberH - 1);
+			eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
+
+			//cout << ksi << ";" << eta << "\t";
+			cout << getTemperatureForCell(ksi, eta) << "\t";
+		}
+		cout << endl;
+	}
+
+}
+
+
 void CellsTab::calculations() {
 	grainGrowth();
 	saveDataToFile();
@@ -444,13 +481,16 @@ void CellsTab::calculations() {
 		singleIteration();	
 		
 	} while (modifiedNumber<(cellsNumberW*cellsNumberH));
-
-
+	
+	cout << "t1: " << t1 << "t2: " << t2 << "t3: " << t3 << "t4: " << t4;
 	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
-		monteCarloIteration(); //WERSJA BEZ TEMPERATURY
+		
+		cout << "Monte carlo z temperatura" << endl; //WERSJA Z TEMPERATURA
+		calculateTemperatureForEveryCell();
 	}
 	else {
-		cout << "Monte carlo z temperatura" << endl; //WERSJA Z TEMPERATURA
+		cout << "Monte carlo" << endl;
+		monteCarloIteration(); //WERSJA BEZ TEMPERATURY
 	}
 	
 

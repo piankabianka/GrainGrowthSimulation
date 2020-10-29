@@ -41,5 +41,8 @@ struct CellsTab {
 
 	void calculateEnergy(int i, int j);
 
+	void calculateTemperatureForEveryCell();
+	double getTemperatureForCell(double ksi, double eta);
+
 	void saveDataToFile();
 };
