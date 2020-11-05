@@ -3,6 +3,7 @@
 #include "Color.h"
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 struct CellsTab {
@@ -21,6 +22,8 @@ struct CellsTab {
 	double t2;
 	double t3;
 	double t4;
+	
+	bool temperatureInfluence = false;
 	
 
 	CellsTab(string path);
@@ -42,7 +45,9 @@ struct CellsTab {
 	void calculateEnergy(int i, int j);
 
 	void calculateTemperatureForEveryCell();
+	double calculateTemperatureForOneCell(int i, int j);
 	double getTemperatureForCell(double ksi, double eta);
+	int returnColorFromTemperature(double t, vector<double>& vec);
 
 	void saveDataToFile();
 };

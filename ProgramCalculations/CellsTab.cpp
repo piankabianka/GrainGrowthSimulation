@@ -18,11 +18,12 @@ using namespace std;
 int xIndex = 0;
 int yIndex = 0;
 int modifiedNumber = 0;
+double temperatureTab[4];
 
 CellsTab::CellsTab(string path) {
-	
+
 	GlobalData data(path);
-	
+
 	cellsNumberW = data.height;
 	cellsNumberH = data.width;
 	germsNumber = data.germsNumber;
@@ -35,7 +36,28 @@ CellsTab::CellsTab(string path) {
 	t3 = data.t3;
 	t4 = data.t4;
 
-	cellsTab = new Cell* [cellsNumberW];
+	temperatureTab[0] = t1;
+	temperatureTab[1] = t2;
+	temperatureTab[2] = t3;
+	temperatureTab[4] = t4;
+
+	double temp;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 1; j < 4; j++) {
+			if (temperatureTab[j] < temperatureTab[i]) {
+				temp = temperatureTab[i];
+				temperatureTab[i] = temperatureTab[j];
+				temperatureTab[j] = temp;
+			}
+		}
+	}
+
+
+	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
+		temperatureInfluence = true;
+	}
+
+	cellsTab = new Cell * [cellsNumberW];
 
 	for (int i = 0; i < cellsNumberW; i++) {
 		cellsTab[i] = new Cell[cellsNumberH];
@@ -77,7 +99,7 @@ bool CellsTab::checkIfColorExists(Color c) {
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
 			if (color.compareColors(cellsTab[i][j].color, c)) {
-				condition=true;
+				condition = true;
 				break;
 			}
 		}
@@ -85,7 +107,7 @@ bool CellsTab::checkIfColorExists(Color c) {
 	return condition;
 }
 
- Color CellsTab::generateRandomColor() {
+Color CellsTab::generateRandomColor() {
 	Color c;
 	srand(time(NULL));
 	c.r = (rand() % 255);
@@ -126,16 +148,16 @@ bool CellsTab::checkIfColorIsWhite(Color c) {
 int CellsTab::countNeighbors(int index1, int index2) {
 	int counter = 0;
 
-	if (!checkIfColorIsWhite(copyTab[index1-1][index2].color))
+	if (!checkIfColorIsWhite(copyTab[index1 - 1][index2].color))
 		counter++;
 
-	if (!checkIfColorIsWhite(copyTab[index1][index2+1].color))
+	if (!checkIfColorIsWhite(copyTab[index1][index2 + 1].color))
 		counter++;
-	
+
 	if (!checkIfColorIsWhite(copyTab[index1 + 1][index2].color))
 		counter++;
-	
-	if (!checkIfColorIsWhite(copyTab[index1][index2-1].color))
+
+	if (!checkIfColorIsWhite(copyTab[index1][index2 - 1].color))
 		counter++;
 
 	if (nghb == 2) {
@@ -151,14 +173,14 @@ int CellsTab::countNeighbors(int index1, int index2) {
 		if (!checkIfColorIsWhite(copyTab[index1 - 1][index2 + 1].color))
 			counter++;
 	}
-	
+
 	return counter;
 }
 
 Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 	Color c;
-	
-	if(nghbCounter!=0) {
+
+	if (nghbCounter != 0) {
 
 		int tmp;
 		Color tmpColor;
@@ -175,10 +197,10 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		colorTab[3] = copyTab[indexI][indexJ - 1].color;
 
 		if (nghbNumber == 8) {
-			colorTab[4] = copyTab[indexI - 1][indexJ-1].color;
-			colorTab[5] = copyTab[indexI+1][indexJ + 1].color;
-			colorTab[6] = copyTab[indexI + 1][indexJ-1].color;
-			colorTab[7] = copyTab[indexI-1][indexJ +1].color;
+			colorTab[4] = copyTab[indexI - 1][indexJ - 1].color;
+			colorTab[5] = copyTab[indexI + 1][indexJ + 1].color;
+			colorTab[6] = copyTab[indexI + 1][indexJ - 1].color;
+			colorTab[7] = copyTab[indexI - 1][indexJ + 1].color;
 		}
 
 		int c1 = 0;
@@ -189,7 +211,7 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		int c6 = 0;
 		int c7 = 0;
 		int c8 = 0;
-		
+
 
 		for (int i = 0; i < nghbNumber; i++) {
 			if (c.compareColors(colorTab[i], colorTab[0])) {
@@ -228,7 +250,7 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		if (nghbNumber == 8) {
 			int counterTab[8] = { c1, c2, c3, c4,c5,c6,c7,c8 };
 		}
-			
+
 
 		for (int i = 0; i < nghbNumber; i++) {
 			for (int j = i + 1; j < nghbNumber; j++) {
@@ -253,7 +275,7 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			}
 		}
 	}
-		
+
 	return c;
 }
 
@@ -315,18 +337,18 @@ void CellsTab::copyCellTabToCopyTab() {
 		}
 	}*/
 
-	
+
 }
 
 void CellsTab::singleIteration() {
-	
+
 	copyCellTabToCopyTab();
-	
+
 	for (int i = 1; i < cellsNumberW + 1; i++) {
 		for (int j = 1; j < cellsNumberH + 1; j++) {
 			if (checkIfColorIsWhite(copyTab[i][j].color)) {
-				cellsTab[i - 1][j - 1].color = setNewCellColor(countNeighbors(i, j), i, j); 
-				
+				cellsTab[i - 1][j - 1].color = setNewCellColor(countNeighbors(i, j), i, j);
+
 			}
 		}
 	}
@@ -335,10 +357,10 @@ void CellsTab::singleIteration() {
 	saveDataToFile();
 }
 
-bool CellsTab:: checkIfAllCellsAreModified() {
+bool CellsTab::checkIfAllCellsAreModified() {
 	int counter = 0;
 	bool returnValue;
-	for (int i = 0; i < cellsNumberW ; i++) {
+	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
 			if (!checkIfColorIsWhite(cellsTab[i][j].color)) {
 				counter++;
@@ -347,26 +369,44 @@ bool CellsTab:: checkIfAllCellsAreModified() {
 	}
 
 	if (counter == (cellsNumberW * cellsNumberH)) {
-		returnValue= true;
+		returnValue = true;
 	}
 	else
-		returnValue= false;
+		returnValue = false;
 
 	return returnValue;
 }
 
+
+int CellsTab::returnColorFromTemperature(double t, vector<double>& vec) {
+
+	int c;
+	for (std::vector<int>::size_type i = 0; i != vec.size(); i++) {
+		/* std::cout << v[i]; ... */
+		if (vec[i] == t) {
+			c = i;
+			break;
+		}
+	}
+	return c;
+}
+
 void CellsTab::calculateEnergy(int i, int j) {
 
-	Color c = copyTab[i+1][j+1].color;
+	Color c = copyTab[i + 1][j + 1].color;
 	Color colorRandom;
 	int energy = 0;
 	int energyRandom = 0;
+
+	double temperature = 0;
+	double tempRandom = 0;
+
 	int counter = 0;
 	vector <Color> colorVector;
+	vector<double> tempVector;
 
 
-	Color nghbTab[4] = { copyTab[i][j+1].color, copyTab[i+1][j+2].color, copyTab[i+2][j+1].color, copyTab[i+1][j].color };
-	
+	Color nghbTab[4] = { copyTab[i][j + 1].color, copyTab[i + 1][j + 2].color, copyTab[i + 2][j + 1].color, copyTab[i + 1][j].color };
 
 	for (int i = 0; i < 4; i++) {
 		if (!c.compareColors(c, nghbTab[i]) && !checkIfColorIsWhite(nghbTab[i])) {
@@ -375,34 +415,82 @@ void CellsTab::calculateEnergy(int i, int j) {
 		}
 	}
 
+	if (temperatureInfluence) {
+		tempVector = { calculateTemperatureForOneCell(i + 1,j + 2),calculateTemperatureForOneCell(i + 2,j + 3) ,calculateTemperatureForOneCell(i + 3,j + 2) ,calculateTemperatureForOneCell(i + 2,j + 1) };
+		temperature = calculateTemperatureForOneCell(i + 2, j + 2);
+	}
+
+
 
 	if (colorVector.size() != 0) {
-		
+
 		srand(time(NULL));
 		colorRandom = colorVector[(rand() % colorVector.size())];
 
 		for (int i = 0; i < 4; i++) {
-			if (!c.compareColors(colorRandom, nghbTab[i]))
+			if (!c.compareColors(colorRandom, nghbTab[i])) {
 				energyRandom++;
+			}
+
 		}
+
 		
-		if (energyRandom < energy) {
 
-			copyTab[i+1][j+1].color = colorRandom;
-			copyTab[i + 1][j + 1].energy = energyRandom;
-		}
-		else {
-			double calculation = exp(-(energyRandom - energy) /kT);
-			double probability = (double)(rand() % 100) / 100;
+		if (temperatureInfluence == true) {
 
-			if (probability <= calculation) {
+			double valueT = 0;
+			double valueTRandom = 0;
+
+			tempRandom = tempVector[(rand() % tempVector.size())];
+
+			valueT = temperature / temperatureTab[4];
+			valueTRandom = tempRandom / temperatureTab[4];
+
+
+			if (valueTRandom * energyRandom < energy * valueT) {
 
 				copyTab[i + 1][j + 1].color = colorRandom;
 				copyTab[i + 1][j + 1].energy = energyRandom;
 			}
+			else {
+
+				double calculation = exp(-(energyRandom - energy) / kT);
+				double probability1 = (double)(rand() % 100) / 100;
+
+				if (valueTRandom * probability1 <= calculation * valueT) {
+
+					copyTab[i + 1][j + 1].color = colorRandom;
+					copyTab[i + 1][j + 1].energy = energyRandom;
+				}
+
+			}
 		}
+		if (temperatureInfluence == false) {
+			
+
+			if (energyRandom < energy) {
+
+				copyTab[i + 1][j + 1].color = colorRandom;
+				copyTab[i + 1][j + 1].energy = energyRandom;
+				
+			}
+			else {
+
+				double calculation = exp(-(energyRandom - energy) / kT);
+				double probability1 = (double)(rand() % 100) / 100;
+
+				if (probability1 <= calculation) {
+
+					copyTab[i + 1][j + 1].color = colorRandom;
+					copyTab[i + 1][j + 1].energy = energyRandom;
+					
+				}
+
+			}
+		}
+
 	}
-	
+
 }
 
 void CellsTab::monteCarloIteration() {
@@ -418,38 +506,39 @@ void CellsTab::monteCarloIteration() {
 		}
 	}
 
-	auto it= cellsVector.begin();
+	auto it = cellsVector.begin();
 	srand(time(NULL));
-	
-	int vectorIndex=0;
-	auto iterator=cellsVector.begin();
+
+	int vectorIndex = 0;
+	auto iterator = cellsVector.begin();
+
 
 	do {
 		vectorIndex = (rand() % cellsVector.size());
 		iterator = cellsVector.begin() + vectorIndex;
-		
+
 		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
+
+		cout << cellsVector[vectorIndex].first << "," << cellsVector[vectorIndex].second << endl;
 
 		cellsVector.erase(iterator);
 		vectorIndex = 0;
-		
+
+
 	} while (cellsVector.size() > 0);
+
 }
 
-double calculateCoordinate(int position, int range) {
-
-	return ((2 * position - range) / range);
-}
 
 double CellsTab::getTemperatureForCell(double ksi, double eta) {
 
-	double t=0;
+	double t = 0;
 
-	t = (1 - ksi)*(1 - eta) * t1/4;
-	t += (1 - ksi)*(1 + eta) * t4/4;
-	t +=(1 + ksi)*(1 + eta) * t3/4;
-	t += (1 + ksi)*(1 - eta) * t2/4;
-	
+	t = (1 - ksi) * (1 - eta) * t1 / 4;
+	t += (1 - ksi) * (1 + eta) * t4 / 4;
+	t += (1 + ksi) * (1 + eta) * t3 / 4;
+	t += (1 + ksi) * (1 - eta) * t2 / 4;
+
 
 	return t;
 
@@ -459,12 +548,11 @@ void CellsTab::calculateTemperatureForEveryCell() {
 	double ksi;
 	double eta;
 
-	for (int i = 1; i < cellsNumberH+1; i++) {
-		for (int j = 1; j<cellsNumberW+1; j++) {
+	for (int i = 1; i < cellsNumberH + 1; i++) {
+		for (int j = 1; j < cellsNumberW + 1; j++) {
 			ksi = (2 * (double)j - 1 - cellsNumberH) / (cellsNumberH - 1);
 			eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
 
-			//cout << ksi << ";" << eta << "\t";
 			cout << getTemperatureForCell(ksi, eta) << "\t";
 		}
 		cout << endl;
@@ -472,36 +560,40 @@ void CellsTab::calculateTemperatureForEveryCell() {
 
 }
 
+double CellsTab::calculateTemperatureForOneCell(int i, int j) {
+	double ksi;
+	double eta;
+
+	ksi = (2 * (double)j - 1 - cellsNumberH) / (cellsNumberH - 1);
+	eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
+
+	return getTemperatureForCell(ksi, eta);
+}
 
 void CellsTab::calculations() {
 	grainGrowth();
 	saveDataToFile();
 
 	do {
-		singleIteration();	
-		
-	} while (modifiedNumber<(cellsNumberW*cellsNumberH));
-	
-	cout << "t1: " << t1 << "t2: " << t2 << "t3: " << t3 << "t4: " << t4;
-	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
-		
-		cout << "Monte carlo z temperatura" << endl; //WERSJA Z TEMPERATURA
-		calculateTemperatureForEveryCell();
-	}
-	else {
-		cout << "Monte carlo" << endl;
-		monteCarloIteration(); //WERSJA BEZ TEMPERATURY
-	}
-	
+		singleIteration();
+
+	} while (modifiedNumber < (cellsNumberW * cellsNumberH));
+
+
+	monteCarloIteration();
+
 
 	for (int i = 0; i < cellsNumberW; i++) {
 		for (int j = 0; j < cellsNumberH; j++) {
 			cellsTab[i][j] = copyTab[i + 1][j + 1];
+
 		}
 	}
-	
+
+	showCellsTab();
+
 	saveDataToFile();
-	
+
 }
 
 void CellsTab::saveDataToFile() {
@@ -515,6 +607,6 @@ void CellsTab::saveDataToFile() {
 			saveData << cellsTab[i][j].color.b << ";";
 		}
 	}
-	
+
 	saveData.close();
 }
