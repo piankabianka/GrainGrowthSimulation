@@ -91,7 +91,8 @@ function drawCells(dataToDisplay){
         for(let j=startPoint+1; j<endPointX; j+=cellSize){
             singleColor="rgb("+colorArray[counter]+")";
             c.fillStyle=singleColor;
-            c.fillRect(j,i,cellSize-1, cellSize-1);
+            //c.fillRect(j,i,cellSize-1, cellSize-1);
+            c.fillRect(j,i,cellSize, cellSize);
             counter++;
         }
     }
