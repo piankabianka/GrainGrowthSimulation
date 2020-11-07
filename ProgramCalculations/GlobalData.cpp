@@ -22,6 +22,7 @@ GlobalData::GlobalData(string path) {
 			file >> t2;
 			file >> t3;
 			file >> t4;
+			file >> polynomialType;
 		}
 
 	nodesNumberH = width + 1;

@@ -22,6 +22,8 @@ struct GlobalData {
 	double t2;
 	double t3;
 	double t4;
+	int polynomialType;
+
 	GlobalData(string path);
 	void showData();
 };

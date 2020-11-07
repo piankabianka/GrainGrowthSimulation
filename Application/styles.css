@@ -8,7 +8,8 @@ body{
     background-color: #024F59;
     padding:5px;
     position:relative;
-    z-index: 2;
+    /*z-index: 2;*/
+
 }
 
 #navigation ul{
@@ -80,13 +81,17 @@ select{
 
 #site-navigation{
     background-color: #024f59b2;
-    float:right;
+    /*float:right;*/
     border-radius: 0 0 5px 5px;
     opacity:0;
     transition: ease-out 0.5s;
     transform: translateY(-100%);
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    top: 100%;
+    right:1rem;
+    width: 200px;
+    height: max-content;
+    z-index: -1;
 }
 
 #site-navigation ul{

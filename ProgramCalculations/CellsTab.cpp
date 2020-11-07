@@ -1,6 +1,7 @@
 #include "Cell.h"
 #include "CellsTab.h"
 #include "GlobalData.h"
+#include "Color.h"
 #include <math.h>
 
 #include <iostream>
@@ -35,6 +36,7 @@ CellsTab::CellsTab(string path) {
 	t2 = data.t2;
 	t3 = data.t3;
 	t4 = data.t4;
+	polynomialType = data.polynomialType;
 
 	temperatureTab[0] = t1;
 	temperatureTab[1] = t2;
@@ -93,21 +95,21 @@ void CellsTab::showCellsTab() {
 	}
 }
 
-bool CellsTab::checkIfColorExists(Color c) {
-	Color color;
+//calculations
+bool checkIfGrainColorExists(Color c, vector<Color>& vec) {
 	bool condition = false;
-	for (int i = 0; i < cellsNumberW; i++) {
-		for (int j = 0; j < cellsNumberH; j++) {
-			if (color.compareColors(cellsTab[i][j].color, c)) {
-				condition = true;
-				break;
-			}
+
+	for (std::vector<int>::size_type i = 0; i != vec.size(); i++) {
+		if (c.compareColors(vec[i],c)) {
+			condition = true;
+			break;
 		}
 	}
 	return condition;
 }
 
-Color CellsTab::generateRandomColor() {
+//calculations
+Color generateRandomColor() {
 	Color c;
 	srand(time(NULL));
 	c.r = (rand() % 255);
@@ -117,16 +119,22 @@ Color CellsTab::generateRandomColor() {
 }
 
 void CellsTab::grainGrowth() {
+	
+	vector <Color> grainsColorVector;
+	Color c;
 	srand(time(NULL));
 	do {
-
+		
 		xIndex = (rand() % cellsNumberW);
 		yIndex = (rand() % cellsNumberH);
+		
 
 		if (!cellsTab[xIndex][yIndex].grain) {
-			Color c = generateRandomColor();
-			if (!checkIfColorExists(c)) {
+			c = generateRandomColor();
+			
+			if (!checkIfGrainColorExists(c, grainsColorVector)) {
 				cellsTab[xIndex][yIndex].color = c;
+				grainsColorVector.push_back(c);
 				modifiedNumber++;
 				cellsTab[xIndex][yIndex].grain = true;
 			}
@@ -134,9 +142,11 @@ void CellsTab::grainGrowth() {
 
 	} while (modifiedNumber < germsNumber);
 
+
 }
 
-bool CellsTab::checkIfColorIsWhite(Color c) {
+//calculations
+bool checkIfColorIsWhite(Color c) {
 	if (c.r == 255 && c.g == 255 && c.b == 255) {
 		return true;
 	}
@@ -201,67 +211,62 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 			colorTab[5] = copyTab[indexI + 1][indexJ + 1].color;
 			colorTab[6] = copyTab[indexI + 1][indexJ - 1].color;
 			colorTab[7] = copyTab[indexI - 1][indexJ + 1].color;
+
 		}
 
-		int c1 = 0;
-		int c2 = 0;
-		int c3 = 0;
-		int c4 = 0;
-		int c5 = 0;
-		int c6 = 0;
-		int c7 = 0;
-		int c8 = 0;
+		int counters[8] = { 0 };
 
 
 		for (int i = 0; i < nghbNumber; i++) {
 			if (c.compareColors(colorTab[i], colorTab[0])) {
-				c1++;
+				counters[0];
 			}
 			if (c.compareColors(colorTab[i], colorTab[1])) {
-				c2++;
+				counters[1];
 			}
 			if (c.compareColors(colorTab[i], colorTab[2])) {
-				c3++;
+				counters[2];
 			}
 			if (c.compareColors(colorTab[i], colorTab[3])) {
-				c4++;
+				counters[3];
 			}
 			if (nghbNumber == 8) {
 				if (c.compareColors(colorTab[i], colorTab[4])) {
-					c5++;
+					counters[4];
 				}
 				if (c.compareColors(colorTab[i], colorTab[5])) {
-					c6++;
+					counters[5];;
 				}
 				if (c.compareColors(colorTab[i], colorTab[6])) {
-					c7++;
+					counters[6];;
 				}
 				if (c.compareColors(colorTab[i], colorTab[7])) {
-					c8++;
+					counters[7];;
 				}
 			}
 		}
 
+		
+
 		int* counterTab = new int[nghbNumber];
 
-		if (nghbNumber == 4) {
-			int counterTab[4] = { c1, c2, c3, c4 };
-		}
-		if (nghbNumber == 8) {
-			int counterTab[8] = { c1, c2, c3, c4,c5,c6,c7,c8 };
-		}
-
+		vector <int> countersVector;
 
 		for (int i = 0; i < nghbNumber; i++) {
-			for (int j = i + 1; j < nghbNumber; j++) {
+			countersVector.push_back(counters[i]);
+		}
+
+
+		for (std::vector<int>::size_type i = 0; i != countersVector.size(); i++) {
+			for (std::vector<int>::size_type j = i + 1; j != countersVector.size(); j++) {
 				if (counterTab[i] > counterTab[j]) {
-					tmp = counterTab[i];
+					tmp = countersVector[i];
 					tmpColor = colorTab[i];
 
-					counterTab[i] = counterTab[j];
+					countersVector[i] = countersVector[j];
 					colorTab[i] = colorTab[j];
 
-					counterTab[j] = tmp;
+					countersVector[j] = tmp;
 					colorTab[j] = tmpColor;
 				}
 			}
@@ -353,42 +358,7 @@ void CellsTab::singleIteration() {
 		}
 	}
 
-	clearCopyTab();
 	saveDataToFile();
-}
-
-bool CellsTab::checkIfAllCellsAreModified() {
-	int counter = 0;
-	bool returnValue;
-	for (int i = 0; i < cellsNumberW; i++) {
-		for (int j = 0; j < cellsNumberH; j++) {
-			if (!checkIfColorIsWhite(cellsTab[i][j].color)) {
-				counter++;
-			}
-		}
-	}
-
-	if (counter == (cellsNumberW * cellsNumberH)) {
-		returnValue = true;
-	}
-	else
-		returnValue = false;
-
-	return returnValue;
-}
-
-
-int CellsTab::returnColorFromTemperature(double t, vector<double>& vec) {
-
-	int c;
-	for (std::vector<int>::size_type i = 0; i != vec.size(); i++) {
-		/* std::cout << v[i]; ... */
-		if (vec[i] == t) {
-			c = i;
-			break;
-		}
-	}
-	return c;
 }
 
 void CellsTab::calculateEnergy(int i, int j) {
@@ -405,13 +375,34 @@ void CellsTab::calculateEnergy(int i, int j) {
 	vector <Color> colorVector;
 	vector<double> tempVector;
 
+	int nghbNumber;
+	if (nghb == 1) nghbNumber = 4;
+	if (nghb == 2) nghbNumber = 8;
 
-	Color nghbTab[4] = { copyTab[i][j + 1].color, copyTab[i + 1][j + 2].color, copyTab[i + 2][j + 1].color, copyTab[i + 1][j].color };
+	Color* colorTab = new Color[nghbNumber];
+	int indexI = i+1;
+	int indexJ = j + 1;
 
-	for (int i = 0; i < 4; i++) {
-		if (!c.compareColors(c, nghbTab[i]) && !checkIfColorIsWhite(nghbTab[i])) {
+	colorTab[0] = copyTab[indexI - 1][indexJ].color;
+	colorTab[1] = copyTab[indexI][indexJ + 1].color;
+	colorTab[2] = copyTab[indexI + 1][indexJ].color;
+	colorTab[3] = copyTab[indexI][indexJ - 1].color;
+
+	if (nghbNumber == 8) {
+		colorTab[4] = copyTab[indexI - 1][indexJ - 1].color;
+		colorTab[5] = copyTab[indexI + 1][indexJ + 1].color;
+		colorTab[6] = copyTab[indexI + 1][indexJ - 1].color;
+		colorTab[7] = copyTab[indexI - 1][indexJ + 1].color;
+
+	}
+
+
+	//Color nghbTab[4] = { copyTab[i][j + 1].color, copyTab[i + 1][j + 2].color, copyTab[i + 2][j + 1].color, copyTab[i + 1][j].color };
+
+	for (int i = 0; i < nghbNumber; i++) {
+		if (!c.compareColors(c, colorTab[i]) && !checkIfColorIsWhite(colorTab[i])) {
 			energy++;
-			colorVector.push_back(nghbTab[i]);
+			colorVector.push_back(colorTab[i]);
 		}
 	}
 
@@ -428,7 +419,7 @@ void CellsTab::calculateEnergy(int i, int j) {
 		colorRandom = colorVector[(rand() % colorVector.size())];
 
 		for (int i = 0; i < 4; i++) {
-			if (!c.compareColors(colorRandom, nghbTab[i])) {
+			if (!c.compareColors(colorRandom, colorTab[i])) {
 				energyRandom++;
 			}
 
@@ -519,7 +510,6 @@ void CellsTab::monteCarloIteration() {
 
 		calculateEnergy(cellsVector[vectorIndex].first, cellsVector[vectorIndex].second);
 
-		cout << cellsVector[vectorIndex].first << "," << cellsVector[vectorIndex].second << endl;
 
 		cellsVector.erase(iterator);
 		vectorIndex = 0;
@@ -528,7 +518,6 @@ void CellsTab::monteCarloIteration() {
 	} while (cellsVector.size() > 0);
 
 }
-
 
 double CellsTab::getTemperatureForCell(double ksi, double eta) {
 
@@ -589,8 +578,6 @@ void CellsTab::calculations() {
 
 		}
 	}
-
-	showCellsTab();
 
 	saveDataToFile();
 

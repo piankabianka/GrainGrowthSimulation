@@ -18,12 +18,13 @@ struct CellsTab {
 	double kT;
 	int bc;
 	int nghb;
+	bool temperatureInfluence = false;
 	double t1;
 	double t2;
 	double t3;
 	double t4;
+	int polynomialType;
 	
-	bool temperatureInfluence = false;
 	
 
 	CellsTab(string path);
@@ -35,19 +36,19 @@ struct CellsTab {
 	void copyCellTabToCopyTab();
 	void clearCopyTab();
 
-	bool checkIfColorExists(Color c);
+	
+
+	//bool checkIfGrainColorExists(Color c, vector<Color>& vec);
 	int countNeighbors(int index1, int index2);
-	bool checkIfColorIsWhite(Color c);
-	bool checkIfAllCellsAreModified();
+	//bool checkIfColorIsWhite(Color c);
 	Color setNewCellColor(int nghbCounter, int indexI, int indexJ);
-	Color generateRandomColor();
+	//Color generateRandomColor();
 
 	void calculateEnergy(int i, int j);
 
 	void calculateTemperatureForEveryCell();
 	double calculateTemperatureForOneCell(int i, int j);
 	double getTemperatureForCell(double ksi, double eta);
-	int returnColorFromTemperature(double t, vector<double>& vec);
 
 	void saveDataToFile();
 };
