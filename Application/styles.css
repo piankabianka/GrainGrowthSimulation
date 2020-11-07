@@ -110,5 +110,5 @@ select{
 }
 
 canvas{
-   transform:translateY(-200px);
+   /*transform:translateY(-200px);*/
 }

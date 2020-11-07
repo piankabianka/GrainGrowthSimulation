@@ -16,7 +16,7 @@ let elementsXValue=undefined;
 const elementsY=document.querySelector('#nodesY');
 let elementsYValue=undefined;
 
-const cellSize=8;
+const cellSize=5;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -48,6 +48,8 @@ let temp1;
 let temp2;
 let temp3;
 let temp4;
+let polynomialTypeValue=undefined;
+let polynomialType=undefined;
 
 function drawGrid(){
     for(let i=0; i<=elementsXValue; i++){
@@ -105,7 +107,7 @@ function saveDataToFile(){
     string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT+"\n"+bc+"\n"+nghb;
 
   
-    string+="\n"+temp1+"\n"+temp2+"\n"+temp3+"\n"+temp4;
+    string+="\n"+temp1+"\n"+temp2+"\n"+temp3+"\n"+temp4+"\n"+polynomialType;
 
 
     fs.writeFileSync("./data.txt",string, 'utf8', function(err){
@@ -134,23 +136,19 @@ submitButton.addEventListener('click', function(e){
     endPointY=cellSize*elementsYValue;
     grainsNumber=grains.querySelector('input[type="text"]').value;
     kT=kTParameter.querySelector('input[type="text"]').value;
-
-    borderConditionValue=document.querySelector('#border-conditions option:checked').value
-    
-
-    nghbValue=document.querySelector('#neighbourhood-type option:checked').value
+    borderConditionValue=document.querySelector('#border-conditions option:checked').value;
+    nghbValue=document.querySelector('#neighbourhood-type option:checked').value;
+    polynomialTypeValue=document.querySelector('#polynomial option:checked').value;
     
     if(borderConditionValue=='Periodic'){
         bc=1;
-    }
-    if(borderConditionValue=='Absorbable'){
+    } else if(borderConditionValue=='Absorbable'){
         bc=2;
     }
 
     if(nghbValue=='Neumann'){
         nghb=1;
-    }
-    if(nghbValue=='Moore'){
+    } else if(nghbValue=='Moore'){
         nghb=2;
     }
 
@@ -160,12 +158,20 @@ submitButton.addEventListener('click', function(e){
         temp1=t1.querySelector('input[type="text"]').value;
         temp2=t2.querySelector('input[type="text"]').value;
         temp3=t3.querySelector('input[type="text"]').value;
-        temp4=t4.querySelector('input[type="text"]').value;        
+        temp4=t4.querySelector('input[type="text"]').value;   
+        if(polynomialTypeValue=='linear'){
+            polynomialType=1;
+        }  else if(polynomialTypeValue=='second'){
+            polynomialType=2;
+        } else{
+            polynomialType=3;
+        }   
     }else{
         temp1=-1;
         temp2=-1;
         temp3=-1;
         temp4=-1;
+        polynomialType=-1;
     }
     
 
