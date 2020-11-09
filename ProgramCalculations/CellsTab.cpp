@@ -2,6 +2,7 @@
 #include "CellsTab.h"
 #include "GlobalData.h"
 #include "Color.h"
+#include "Calculations.h"
 #include <math.h>
 
 #include <iostream>
@@ -21,7 +22,10 @@ int yIndex = 0;
 int modifiedNumber = 0;
 double temperatureTab[4];
 
+CellsTab::CellsTab() {};
+
 CellsTab::CellsTab(string path) {
+	
 
 	GlobalData data(path);
 
@@ -41,7 +45,7 @@ CellsTab::CellsTab(string path) {
 	temperatureTab[0] = t1;
 	temperatureTab[1] = t2;
 	temperatureTab[2] = t3;
-	temperatureTab[4] = t4;
+	temperatureTab[3] = t4;
 
 	double temp;
 	for (int i = 0; i < 4; i++) {
@@ -361,6 +365,13 @@ void CellsTab::singleIteration() {
 	saveDataToFile();
 }
 
+void CellsTab::doIterations() {
+	do {
+		singleIteration();
+
+	} while (modifiedNumber < (cellsNumberW * cellsNumberH));
+}
+
 void CellsTab::calculateEnergy(int i, int j) {
 
 	Color c = copyTab[i + 1][j + 1].color;
@@ -395,9 +406,6 @@ void CellsTab::calculateEnergy(int i, int j) {
 		colorTab[7] = copyTab[indexI - 1][indexJ + 1].color;
 
 	}
-
-
-	//Color nghbTab[4] = { copyTab[i][j + 1].color, copyTab[i + 1][j + 2].color, copyTab[i + 2][j + 1].color, copyTab[i + 1][j].color };
 
 	for (int i = 0; i < nghbNumber; i++) {
 		if (!c.compareColors(c, colorTab[i]) && !checkIfColorIsWhite(colorTab[i])) {
@@ -517,6 +525,13 @@ void CellsTab::monteCarloIteration() {
 
 	} while (cellsVector.size() > 0);
 
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			cellsTab[i][j] = copyTab[i + 1][j + 1];
+
+		}
+	}
+
 }
 
 double CellsTab::getTemperatureForCell(double ksi, double eta) {
@@ -557,30 +572,6 @@ double CellsTab::calculateTemperatureForOneCell(int i, int j) {
 	eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
 
 	return getTemperatureForCell(ksi, eta);
-}
-
-void CellsTab::calculations() {
-	grainGrowth();
-	saveDataToFile();
-
-	do {
-		singleIteration();
-
-	} while (modifiedNumber < (cellsNumberW * cellsNumberH));
-
-
-	monteCarloIteration();
-
-
-	for (int i = 0; i < cellsNumberW; i++) {
-		for (int j = 0; j < cellsNumberH; j++) {
-			cellsTab[i][j] = copyTab[i + 1][j + 1];
-
-		}
-	}
-
-	saveDataToFile();
-
 }
 
 void CellsTab::saveDataToFile() {

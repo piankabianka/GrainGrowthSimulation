@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Calculations.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellsTab.cpp" />
     <ClCompile Include="Color.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="ProgramCalculations.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Calculations.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellsTab.h" />
     <ClInclude Include="Color.h" />

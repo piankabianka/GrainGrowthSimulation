@@ -28,21 +28,20 @@ struct CellsTab {
 	
 
 	CellsTab(string path);
+	CellsTab();
 	void showCellsTab();
 	void grainGrowth();
+
 	void singleIteration();
+	void doIterations();
 	void monteCarloIteration();
-	void calculations();
 	void copyCellTabToCopyTab();
 	void clearCopyTab();
 
-	
 
-	//bool checkIfGrainColorExists(Color c, vector<Color>& vec);
 	int countNeighbors(int index1, int index2);
-	//bool checkIfColorIsWhite(Color c);
 	Color setNewCellColor(int nghbCounter, int indexI, int indexJ);
-	//Color generateRandomColor();
+
 
 	void calculateEnergy(int i, int j);
 
