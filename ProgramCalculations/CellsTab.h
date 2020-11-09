@@ -1,6 +1,7 @@
 #pragma once
 #include "Cell.h"
 #include "Color.h"
+#include "Functions.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -24,6 +25,8 @@ struct CellsTab {
 	double t3;
 	double t4;
 	int polynomialType;
+
+	Functions functions;
 	
 	
 

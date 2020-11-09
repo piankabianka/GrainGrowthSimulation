@@ -143,6 +143,7 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellsTab.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="ProgramCalculations.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellsTab.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="GlobalData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

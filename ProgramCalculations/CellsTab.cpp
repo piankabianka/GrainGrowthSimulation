@@ -3,6 +3,7 @@
 #include "GlobalData.h"
 #include "Color.h"
 #include "Calculations.h"
+#include "Functions.h"
 #include <math.h>
 
 #include <iostream>
@@ -99,29 +100,6 @@ void CellsTab::showCellsTab() {
 	}
 }
 
-//calculations
-bool checkIfGrainColorExists(Color c, vector<Color>& vec) {
-	bool condition = false;
-
-	for (std::vector<int>::size_type i = 0; i != vec.size(); i++) {
-		if (c.compareColors(vec[i],c)) {
-			condition = true;
-			break;
-		}
-	}
-	return condition;
-}
-
-//calculations
-Color generateRandomColor() {
-	Color c;
-	srand(time(NULL));
-	c.r = (rand() % 255);
-	c.g = (rand() % 255);
-	c.b = (rand() % 255);
-	return c;
-}
-
 void CellsTab::grainGrowth() {
 	
 	vector <Color> grainsColorVector;
@@ -134,9 +112,9 @@ void CellsTab::grainGrowth() {
 		
 
 		if (!cellsTab[xIndex][yIndex].grain) {
-			c = generateRandomColor();
+			c = functions.generateRandomColor();
 			
-			if (!checkIfGrainColorExists(c, grainsColorVector)) {
+			if (!functions.checkIfGrainColorExists(c, grainsColorVector)) {
 				cellsTab[xIndex][yIndex].color = c;
 				grainsColorVector.push_back(c);
 				modifiedNumber++;
@@ -149,42 +127,32 @@ void CellsTab::grainGrowth() {
 
 }
 
-//calculations
-bool checkIfColorIsWhite(Color c) {
-	if (c.r == 255 && c.g == 255 && c.b == 255) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
 int CellsTab::countNeighbors(int index1, int index2) {
 	int counter = 0;
 
-	if (!checkIfColorIsWhite(copyTab[index1 - 1][index2].color))
+	if (!functions.checkIfColorIsWhite(copyTab[index1 - 1][index2].color))
 		counter++;
 
-	if (!checkIfColorIsWhite(copyTab[index1][index2 + 1].color))
+	if (!functions.checkIfColorIsWhite(copyTab[index1][index2 + 1].color))
 		counter++;
 
-	if (!checkIfColorIsWhite(copyTab[index1 + 1][index2].color))
+	if (!functions.checkIfColorIsWhite(copyTab[index1 + 1][index2].color))
 		counter++;
 
-	if (!checkIfColorIsWhite(copyTab[index1][index2 - 1].color))
+	if (!functions.checkIfColorIsWhite(copyTab[index1][index2 - 1].color))
 		counter++;
 
 	if (nghb == 2) {
-		if (!checkIfColorIsWhite(copyTab[index1 - 1][index2 - 1].color))
+		if (!functions.checkIfColorIsWhite(copyTab[index1 - 1][index2 - 1].color))
 			counter++;
 
-		if (!checkIfColorIsWhite(copyTab[index1 + 1][index2 + 1].color))
+		if (!functions.checkIfColorIsWhite(copyTab[index1 + 1][index2 + 1].color))
 			counter++;
 
-		if (!checkIfColorIsWhite(copyTab[index1 + 1][index2 - 1].color))
+		if (!functions.checkIfColorIsWhite(copyTab[index1 + 1][index2 - 1].color))
 			counter++;
 
-		if (!checkIfColorIsWhite(copyTab[index1 - 1][index2 + 1].color))
+		if (!functions.checkIfColorIsWhite(copyTab[index1 - 1][index2 + 1].color))
 			counter++;
 	}
 
@@ -277,7 +245,7 @@ Color CellsTab::setNewCellColor(int nghbCounter, int indexI, int indexJ) {
 		}
 
 		for (int i = 0; i < nghbNumber; i++) {
-			if (!checkIfColorIsWhite(colorTab[i])) {
+			if (!functions.checkIfColorIsWhite(colorTab[i])) {
 				c = colorTab[i];
 				modifiedNumber++;
 				break;
@@ -355,7 +323,7 @@ void CellsTab::singleIteration() {
 
 	for (int i = 1; i < cellsNumberW + 1; i++) {
 		for (int j = 1; j < cellsNumberH + 1; j++) {
-			if (checkIfColorIsWhite(copyTab[i][j].color)) {
+			if (functions.checkIfColorIsWhite(copyTab[i][j].color)) {
 				cellsTab[i - 1][j - 1].color = setNewCellColor(countNeighbors(i, j), i, j);
 
 			}
@@ -408,7 +376,7 @@ void CellsTab::calculateEnergy(int i, int j) {
 	}
 
 	for (int i = 0; i < nghbNumber; i++) {
-		if (!c.compareColors(c, colorTab[i]) && !checkIfColorIsWhite(colorTab[i])) {
+		if (!c.compareColors(c, colorTab[i]) && !functions.checkIfColorIsWhite(colorTab[i])) {
 			energy++;
 			colorVector.push_back(colorTab[i]);
 		}
