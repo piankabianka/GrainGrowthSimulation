@@ -9,8 +9,13 @@ using namespace std;
 
 
 int main(int argc, char** argv)
-{	Calculations c(argv[1]);
-	c.calculate();
-	return 0;
+{	
+	if (argc > 1) {
+		Calculations c(argv[1]);
+		c.calculate();
+	}
+		
+	
+		return 0;
 }
 

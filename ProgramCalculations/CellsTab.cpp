@@ -21,7 +21,7 @@ using namespace std;
 int xIndex = 0;
 int yIndex = 0;
 int modifiedNumber = 0;
-double temperatureTab[4];
+
 
 CellsTab::CellsTab() {};
 
@@ -43,26 +43,18 @@ CellsTab::CellsTab(string path) {
 	t4 = data.t4;
 	polynomialType = data.polynomialType;
 
-	temperatureTab[0] = t1;
-	temperatureTab[1] = t2;
-	temperatureTab[2] = t3;
-	temperatureTab[3] = t4;
+	temperatureVector.push_back(t1);
+	temperatureVector.push_back(t2);
+	temperatureVector.push_back(t3);
+	temperatureVector.push_back(t4);
 
-	double temp;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 1; j < 4; j++) {
-			if (temperatureTab[j] < temperatureTab[i]) {
-				temp = temperatureTab[i];
-				temperatureTab[i] = temperatureTab[j];
-				temperatureTab[j] = temp;
-			}
-		}
-	}
-
+	this->functions = Functions(polynomialType, temperatureVector);
+	
 
 	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
 		temperatureInfluence = true;
 	}
+
 
 	cellsTab = new Cell * [cellsNumberW];
 
@@ -410,8 +402,8 @@ void CellsTab::calculateEnergy(int i, int j) {
 
 			tempRandom = tempVector[(rand() % tempVector.size())];
 
-			valueT = temperature / temperatureTab[4];
-			valueTRandom = tempRandom / temperatureTab[4];
+			valueT = temperature / 10;
+			valueTRandom = tempRandom / 10;
 
 
 			if (valueTRandom * energyRandom < energy * valueT) {

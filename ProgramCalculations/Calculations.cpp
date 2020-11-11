@@ -9,7 +9,7 @@ Calculations::Calculations(string path) {
 }
 
 void Calculations::calculate() {
-	
+
 	cout << "Rozrost ziaren" << endl;
 	cellsTab.grainGrowth();
 	cellsTab.saveDataToFile();

@@ -12,6 +12,7 @@ struct CellsTab {
 	Cell** cellsTab;
 	Cell** copyTab;
 
+	vector <double> temperatureVector;
 	int cellsNumberW;
 	int cellsNumberH;
 	int modifiedCells;
