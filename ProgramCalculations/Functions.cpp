@@ -2,6 +2,7 @@
 #include <vector>
 #include <ctime>
 #include <algorithm> 
+#include<iomanip>
 
 #include "Functions.h"
 #include "Color.h"
@@ -21,10 +22,9 @@ Functions::Functions(int pType, vector<double>& temperatureVector) {
 	coordinates.push_back(0.666);
 	coordinates.push_back(1);
 
-	cout << "polynomial type: " <<polynomialType<< endl;
 	calculateCoefficients();
-
-	cout << calculateTemperatureForX(1) << endl;
+	//cout << calculateXForTemperature(39) << endl;
+	
 }
 
 
@@ -44,6 +44,89 @@ double Functions::calculateTemperatureForX(double x) {
 	return t;
 }
 
+double Functions::calculateXForTemperature(double t) {
+	double x = 0;
+
+	if (polynomialType == 1) {
+		x = getXFromLinear(t);
+	}
+	if (polynomialType == 2) {
+		x = getXFromSecond(t);
+	}
+	if (polynomialType == 3) {
+		x = getXFromThird(t);
+	}
+
+	return x;
+}
+
+double Functions::getXFromLinear(double t){
+	double x = 0;
+	x = (t - y0) / y1;
+	return x;
+
+}
+
+double Functions::getXFromSecond(double t) {
+	double x1 = 0;
+	double x2 = 0;
+
+	double d = (0.5 * y2 - y1) * (0.5 * y2 - y1) - 4 * y2 * (y0 - t);
+
+	x1 = (-(0.5 * y2 - y1) - sqrt(d)) / (2 * y2);
+	x2= (-(0.5 * y2 - y1) + sqrt(d)) / (2 * y2);
+
+	if (x1 <= 1 && x1 >= 0) {
+		return x1;
+	}
+	else {
+		return x2;
+	}
+}
+
+double Functions::f(double x, double t)
+{
+	return y0 + y1 * x + y2 * x * (x - 0.333) + y3 * x * (x - 0.333) * (x - 0.666);
+}
+
+double Functions::polowienie_przedzialow(double a, double b, double epsilon, double t)
+{
+	if (f(a,t) == t)return a;
+	if (f(b,t) == t)return b;
+
+	double srodek;
+
+	cout << "Wczytano temp: " << t << endl;
+
+	while (b - a > epsilon)
+	{
+		cout << "szukam rozwiazania na przedziale: " << a << "," << b << endl;
+		srodek = (a + b) / 2;
+
+		if (f(srodek,t) == t) 
+			return srodek;
+
+		if ( f(srodek,t) > t)
+			b = srodek;
+		else
+			a = srodek;
+	}
+	return (a + b) / 2;
+}
+
+
+
+
+double Functions::getXFromThird(double t) {
+	
+	double a = 0, b = 1, epsilon = 0.01;
+
+	cout << "Znalezione miejsce zerowe wynosi: ";
+
+	return(polowienie_przedzialow(a, b, epsilon, t));
+
+}
+
 double Functions::linearPolynomial(double x) {
 	double t = 0;
 	t = y0 + x *y1;
@@ -53,7 +136,6 @@ double Functions::linearPolynomial(double x) {
 double Functions::secondPolynomial(double x) {
 	double t = 0;
 	t = y0 + x * y1 + y2 * x * (x - 0.5);
-	cout << "ttttttttttttttt: " << t << endl;
 	return t;
 }
 
@@ -117,7 +199,6 @@ void Functions::calculateCoefficientsForSecondPolynomial(){
 		y2 = ((temperatures[3] - average) / (0.5)) - y1;
 	}
 
-	cout << "y1: " << y1 << " y2: " << y2 << endl;
 	
 }
 

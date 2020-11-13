@@ -394,7 +394,6 @@ void CellsTab::calculateEnergy(int i, int j) {
 		}
 
 		
-
 		if (temperatureInfluence == true) {
 
 			double valueT = 0;
@@ -402,8 +401,8 @@ void CellsTab::calculateEnergy(int i, int j) {
 
 			tempRandom = tempVector[(rand() % tempVector.size())];
 
-			valueT = temperature / 10;
-			valueTRandom = tempRandom / 10;
+			valueT = functions.calculateXForTemperature(temperature);
+			valueTRandom = functions.calculateXForTemperature(tempRandom);
 
 
 			if (valueTRandom * energyRandom < energy * valueT) {

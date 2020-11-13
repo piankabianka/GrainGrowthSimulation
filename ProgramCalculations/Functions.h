@@ -24,7 +24,16 @@ struct Functions {
 	double linearPolynomial(double x);
 	double secondPolynomial(double x);
 	double thirdPolynomial(double x);
+
 	double calculateTemperatureForX(double x);
+	double calculateXForTemperature(double t);
+
+	double getXFromLinear(double t);
+	double getXFromSecond(double t);
+	double getXFromThird(double t);
+	double f(double x, double t);
+	double polowienie_przedzialow(double a, double b, double epsilon, double t);
+
 	void calculateCoefficients();
 	void calculateCoefficientsForLinearPolynomial();
 	void calculateCoefficientsForThirdPolynomial();
