@@ -1,13 +1,14 @@
 
 //CANVAS
 const canvas=document.querySelector('canvas');
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight-document.querySelector('#navigation').offsetHeight;
+//canvas.width=window.innerWidth;
+///canvas.height=window.innerHeight-document.querySelector('#navigation').offsetHeight;
 const c=canvas.getContext('2d');
 
 
 const submitButton=document.querySelector('#submit');
 const stepButton=document.querySelector('#step');
+const saveImageButton=document.querySelector('#link');
 const removeButton=document.querySelector('#remove');
 
 const elementsX=document.querySelector('#nodesX');
@@ -52,6 +53,9 @@ let polynomialTypeValue=undefined;
 let polynomialType=undefined;
 
 function drawGrid(){
+
+    canvas.width=elementsXValue*cellSize;
+    canvas.height=elementsYValue*cellSize;
     for(let i=0; i<=elementsXValue; i++){
         c.beginPath();
         c.moveTo(i*cellSize, startPoint);
@@ -152,7 +156,6 @@ submitButton.addEventListener('click', function(e){
         nghb=2;
     }
 
-    
 
     if(temperatureInfluence){
         temp1=t1.querySelector('input[type="text"]').value;
@@ -203,10 +206,14 @@ removeButton.addEventListener('click', function(e){
 
     e.preventDefault();
 
-    elementsX.querySelector('input[type="text"]').value="";
+   elementsX.querySelector('input[type="text"]').value="";
     elementsY.querySelector('input[type="text"]').value="";
     grains.querySelector('input[type="text"]').value="";
     kTParameter.querySelector('input[type="text"]').value="";
+    t1.querySelector('input[type="text"]').value="";
+    t2.querySelector('input[type="text"]').value="";
+    t3.querySelector('input[type="text"]').value="";
+    t4.querySelector('input[type="text"]').value="";
 
     const fs = require('fs')
 
@@ -220,9 +227,11 @@ removeButton.addEventListener('click', function(e){
     }
 
     c.clearRect(0, 0, canvas.width, canvas.height);
+    mainWindow.reload();
 })
 
 temperatureOption.addEventListener('click', function(e){
+
     
     if(e.target.checked){
         siteNav.classList.add("show");
@@ -233,4 +242,12 @@ temperatureOption.addEventListener('click', function(e){
         temperatureInfluence=false;
     }
 
+})
+
+saveImageButton.addEventListener('click', function(e){
+    e.preventDefault();
+    let link = document.createElement('a');
+    link.download = "picture.png";
+    link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    link.click();
 })
