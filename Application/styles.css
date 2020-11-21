@@ -91,7 +91,7 @@ select{
     transition: ease-out 0.5s;
     /*transform: translateY(-100%);*/
     position: absolute;
-    right:-100rem;
+    right:-50px;
     height: max-content;
     z-index: 1;
     margin-top: 0;
@@ -113,5 +113,6 @@ select{
 #site-navigation.show{
     opacity: 1;
     /*transform:translateY(0);*/
-    right:1rem;
+    right:0rem;
 }
+

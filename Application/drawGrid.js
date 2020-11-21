@@ -93,8 +93,8 @@ function drawCells(dataToDisplay){
     let singleColor="";
     
 
-    for(let i=startPoint+1; i<endPointY; i+=cellSize){
-        for(let j=startPoint+1; j<endPointX; j+=cellSize){
+    for(let i=startPoint; i<endPointY; i+=cellSize){
+        for(let j=startPoint; j<endPointX; j+=cellSize){
             singleColor="rgb("+colorArray[counter]+")";
             c.fillStyle=singleColor;
             //c.fillRect(j,i,cellSize-1, cellSize-1);
