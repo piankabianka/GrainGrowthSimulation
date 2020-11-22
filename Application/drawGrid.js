@@ -35,10 +35,6 @@ const t1=document.querySelector('#t1');
 const t2=document.querySelector('#t2');
 const t3=document.querySelector('#t3');
 const t4=document.querySelector('#t4');
-/*let temp1;
-let temp2;
-let temp3;
-let temp4;*/
 
 function drawGrid(elementsXValue, elementsYValue){
 
