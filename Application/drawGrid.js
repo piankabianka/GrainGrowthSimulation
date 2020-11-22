@@ -1,8 +1,6 @@
 
 //CANVAS
 const canvas=document.querySelector('canvas');
-//canvas.width=window.innerWidth;
-///canvas.height=window.innerHeight-document.querySelector('#navigation').offsetHeight;
 const c=canvas.getContext('2d');
 
 
@@ -12,10 +10,8 @@ const saveImageButton=document.querySelector('#link');
 const removeButton=document.querySelector('#remove');
 
 const elementsX=document.querySelector('#nodesX');
-let elementsXValue=undefined;
-
 const elementsY=document.querySelector('#nodesY');
-let elementsYValue=undefined;
+
 
 const cellSize=5;
 const startPoint=0;
@@ -23,13 +19,7 @@ let endPointX=undefined
 let endPointY=undefined;
 
 const grains=document.querySelector('#grainsNumber');
-let grainsNumber=undefined;
-
 const kTParameter=document.querySelector('#kTParameter');
-let kT=undefined;
-
-let borderConditionValue=undefined;
-let nghbValue=undefined;
 
 let bc=undefined;
 let nghb=undefined;
@@ -45,14 +35,12 @@ const t1=document.querySelector('#t1');
 const t2=document.querySelector('#t2');
 const t3=document.querySelector('#t3');
 const t4=document.querySelector('#t4');
-let temp1;
+/*let temp1;
 let temp2;
 let temp3;
-let temp4;
-let polynomialTypeValue=undefined;
-let polynomialType=undefined;
+let temp4;*/
 
-function drawGrid(){
+function drawGrid(elementsXValue, elementsYValue){
 
     canvas.width=elementsXValue*cellSize;
     canvas.height=elementsYValue*cellSize;
@@ -104,7 +92,8 @@ function drawCells(dataToDisplay){
     }
 }
 
-function saveDataToFile(){
+function saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4){
+    console.log("Saving data to file!");
     var fs=require('fs');
     const path = require('path');
     let string="";
@@ -134,15 +123,15 @@ function readDataFromFile(){
 submitButton.addEventListener('click', function(e){
     e.preventDefault();
 
-    elementsXValue=elementsX.querySelector('input[type="text"]').value;
-    elementsYValue=elementsY.querySelector('input[type="text"]').value;
-    endPointX=cellSize*elementsXValue;
-    endPointY=cellSize*elementsYValue;
-    grainsNumber=grains.querySelector('input[type="text"]').value;
-    kT=kTParameter.querySelector('input[type="text"]').value;
-    borderConditionValue=document.querySelector('#border-conditions option:checked').value;
-    nghbValue=document.querySelector('#neighbourhood-type option:checked').value;
-    polynomialTypeValue=document.querySelector('#polynomial option:checked').value;
+   let elementsXValue=elementsX.querySelector('input[type="text"]').value;
+   let elementsYValue=elementsY.querySelector('input[type="text"]').value;
+   endPointX=cellSize*elementsXValue;
+   endPointY=cellSize*elementsYValue;
+   let grainsNumber=grains.querySelector('input[type="text"]').value;
+   let kT=kTParameter.querySelector('input[type="text"]').value;
+   let borderConditionValue=document.querySelector('#border-conditions option:checked').value;
+   let nghbValue=document.querySelector('#neighbourhood-type option:checked').value;
+   let polynomialTypeValue=document.querySelector('#polynomial option:checked').value;
     
     if(borderConditionValue=='Periodic'){
         bc=1;
@@ -156,6 +145,11 @@ submitButton.addEventListener('click', function(e){
         nghb=2;
     }
 
+    let  polynomialType=0;
+    let temp1;
+    let temp2;
+    let temp3;
+    let temp4;
 
     if(temperatureInfluence){
         temp1=t1.querySelector('input[type="text"]').value;
@@ -178,14 +172,14 @@ submitButton.addEventListener('click', function(e){
     }
     
 
-    const path = saveDataToFile();
+    const path = saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4);
 
     const { execFile } = require('child_process');
 
 
     execFile('../ProgramCalculations/Release/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
         
-        drawGrid();
+        drawGrid(elementsXValue, elementsYValue);
         
         dataToDisplay=readDataFromFile();
     
@@ -206,7 +200,7 @@ removeButton.addEventListener('click', function(e){
 
     e.preventDefault();
 
-   elementsX.querySelector('input[type="text"]').value="";
+    elementsX.querySelector('input[type="text"]').value="";
     elementsY.querySelector('input[type="text"]').value="";
     grains.querySelector('input[type="text"]').value="";
     kTParameter.querySelector('input[type="text"]').value="";
