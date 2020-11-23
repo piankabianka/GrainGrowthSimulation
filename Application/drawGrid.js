@@ -3,38 +3,33 @@
 const canvas=document.querySelector('canvas');
 const c=canvas.getContext('2d');
 
-
+//BUTTONS
 const submitButton=document.querySelector('#submit');
 const stepButton=document.querySelector('#step');
 const saveImageButton=document.querySelector('#link');
 const removeButton=document.querySelector('#remove');
 
+//VALUES
 const elementsX=document.querySelector('#nodesX');
 const elementsY=document.querySelector('#nodesY');
-
-
-const cellSize=5;
-const startPoint=0;
-let endPointX=undefined
-let endPointY=undefined;
-
 const grains=document.querySelector('#grainsNumber');
 const kTParameter=document.querySelector('#kTParameter');
-
-let bc=undefined;
-let nghb=undefined;
-
-let dataToDisplay=undefined;
-let counter=0;
-
 const temperatureOption=document.querySelector("#temperature-option");
 const siteNav=document.querySelector('#site-navigation');
-
-let temperatureInfluence=false;
 const t1=document.querySelector('#t1');
 const t2=document.querySelector('#t2');
 const t3=document.querySelector('#t3');
 const t4=document.querySelector('#t4');
+
+//PARAMETERS
+const cellSize=5;
+const startPoint=0;
+let endPointX=undefined
+let endPointY=undefined;
+let dataToDisplay=undefined;
+let counter=0;
+let temperatureInfluence=false;
+
 
 function drawGrid(elementsXValue, elementsYValue){
 
@@ -114,13 +109,8 @@ function readDataFromFile(){
     var fs=require('fs');
     return fs.readFileSync('./calculatedData.csv','utf8');
 }
-
-//SUBMIT DATA
-submitButton.addEventListener('click', function(e){
-    e.preventDefault();
-
-   let elementsXValue=elementsX.querySelector('input[type="text"]').value;
-   let elementsYValue=elementsY.querySelector('input[type="text"]').value;
+function getData(elementsXValue, elementsYValue){
+    
    endPointX=cellSize*elementsXValue;
    endPointY=cellSize*elementsYValue;
    let grainsNumber=grains.querySelector('input[type="text"]').value;
@@ -129,12 +119,14 @@ submitButton.addEventListener('click', function(e){
    let nghbValue=document.querySelector('#neighbourhood-type option:checked').value;
    let polynomialTypeValue=document.querySelector('#polynomial option:checked').value;
     
+   let bc;
     if(borderConditionValue=='Periodic'){
         bc=1;
     } else if(borderConditionValue=='Absorbable'){
         bc=2;
     }
 
+    let nghb;
     if(nghbValue=='Neumann'){
         nghb=1;
     } else if(nghbValue=='Moore'){
@@ -167,8 +159,16 @@ submitButton.addEventListener('click', function(e){
         polynomialType=-1;
     }
     
+    return saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4);
+}
 
-    const path = saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4);
+//SUBMIT DATA
+submitButton.addEventListener('click', function(e){
+    e.preventDefault();
+    let elementsXValue=elementsX.querySelector('input[type="text"]').value;
+   let elementsYValue=elementsY.querySelector('input[type="text"]').value;
+
+    const path = getData(elementsXValue, elementsYValue);
 
     const { execFile } = require('child_process');
 
@@ -181,9 +181,6 @@ submitButton.addEventListener('click', function(e){
     
         drawCells(dataToDisplay);
     })
-
-    
-
 })
 
 stepButton.addEventListener('click', function(e){
