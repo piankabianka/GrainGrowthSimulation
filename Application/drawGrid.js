@@ -191,30 +191,14 @@ stepButton.addEventListener('click', function(e){
 
 removeButton.addEventListener('click', function(e){
 
-    e.preventDefault();
-
-    elementsX.querySelector('input[type="text"]').value="";
-    elementsY.querySelector('input[type="text"]').value="";
-    grains.querySelector('input[type="text"]').value="";
-    kTParameter.querySelector('input[type="text"]').value="";
-    t1.querySelector('input[type="text"]').value="";
-    t2.querySelector('input[type="text"]').value="";
-    t3.querySelector('input[type="text"]').value="";
-    t4.querySelector('input[type="text"]').value="";
-
-    const fs = require('fs')
-
-    const path = './calculatedData.csv'
+    location.reload();
 
     try {
     fs.unlinkSync(path)
     //file removed
     } catch(err) {
-    console.error(err)
+    console.error("No file to delete");
     }
-
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    mainWindow.reload();
 })
 
 temperatureOption.addEventListener('click', function(e){
