@@ -191,14 +191,20 @@ stepButton.addEventListener('click', function(e){
 
 removeButton.addEventListener('click', function(e){
 
-    location.reload();
+    const fs = require('fs');
+    const path = './calculatedData.csv';
 
     try {
-    fs.unlinkSync(path)
-    //file removed
-    } catch(err) {
-    console.error("No file to delete");
-    }
+        fs.unlinkSync(path)
+        
+        //file removed
+        } catch(err) {
+        console.error("No file to delete");
+        }
+
+        location.reload();  
+
+    
 })
 
 temperatureOption.addEventListener('click', function(e){
