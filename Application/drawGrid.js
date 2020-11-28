@@ -14,6 +14,7 @@ const elementsX=document.querySelector('#nodesX');
 const elementsY=document.querySelector('#nodesY');
 const grains=document.querySelector('#grainsNumber');
 const kTParameter=document.querySelector('#kTParameter');
+const mc=document.querySelector('#mcSteps');
 const temperatureOption=document.querySelector("#temperature-option");
 const siteNav=document.querySelector('#site-navigation');
 const t1=document.querySelector('#t1');
@@ -83,12 +84,12 @@ function drawCells(dataToDisplay){
     }
 }
 
-function saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4){
+function saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, mcValue, bc, nghb, polynomialType, temp1, temp2,temp3, temp4){
     console.log("Saving data to file!");
     var fs=require('fs');
     const path = require('path');
     let string="";
-    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT+"\n"+bc+"\n"+nghb;
+    string+=elementsXValue+"\n"+elementsYValue+"\n"+grainsNumber+"\n"+kT+"\n"+mcValue+"\n"+bc+"\n"+nghb;
 
   
     string+="\n"+temp1+"\n"+temp2+"\n"+temp3+"\n"+temp4+"\n"+polynomialType;
@@ -115,6 +116,7 @@ function getData(elementsXValue, elementsYValue){
    endPointY=cellSize*elementsYValue;
    let grainsNumber=grains.querySelector('input[type="text"]').value;
    let kT=kTParameter.querySelector('input[type="text"]').value;
+   let mcValue=mc.querySelector('input[type="text"]').value;
    let borderConditionValue=document.querySelector('#border-conditions option:checked').value;
    let nghbValue=document.querySelector('#neighbourhood-type option:checked').value;
    let polynomialTypeValue=document.querySelector('#polynomial option:checked').value;
@@ -159,7 +161,7 @@ function getData(elementsXValue, elementsYValue){
         polynomialType=-1;
     }
     
-    return saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT, bc, nghb, polynomialType, temp1, temp2,temp3, temp4);
+    return saveDataToFile(elementsXValue, elementsYValue, grainsNumber, kT,mcValue, bc, nghb, polynomialType, temp1, temp2,temp3, temp4);
 }
 
 //SUBMIT DATA

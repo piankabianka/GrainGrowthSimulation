@@ -16,6 +16,9 @@ void Calculations::calculate() {
 	cout << "Iteracje" << endl;
 	cellsTab.doIterations();
 	cout << "Monte Carlo" << endl;
-	cellsTab.monteCarloIteration();
-	cellsTab.saveDataToFile();
+	for (int i = 0; i < 5; i++) {
+		cellsTab.monteCarloIteration();
+		cellsTab.saveDataToFile();
+	}
+	
 }
