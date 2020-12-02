@@ -18,6 +18,7 @@ struct CellsTab {
 	int modifiedCells;
 	int germsNumber;
 	double kT;
+	int mcSteps;
 	int bc;
 	int nghb;
 	bool temperatureInfluence = false;

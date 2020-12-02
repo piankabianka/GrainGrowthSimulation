@@ -187,8 +187,9 @@ submitButton.addEventListener('click', function(e){
 
 stepButton.addEventListener('click', function(e){
     e.preventDefault();
-
+    
     drawCells(dataToDisplay);
+    
 })
 
 removeButton.addEventListener('click', function(e){

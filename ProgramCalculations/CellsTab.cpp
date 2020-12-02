@@ -34,6 +34,7 @@ CellsTab::CellsTab(string path) {
 	cellsNumberH = data.width;
 	germsNumber = data.germsNumber;
 	kT = data.kT;
+	mcSteps = data.mcSteps;
 	bc = data.bc;
 	nghb = data.nghb;
 	modifiedCells = 0;
@@ -322,7 +323,7 @@ void CellsTab::singleIteration() {
 		}
 	}
 
-	saveDataToFile();
+	//saveDataToFile();
 }
 
 void CellsTab::doIterations() {

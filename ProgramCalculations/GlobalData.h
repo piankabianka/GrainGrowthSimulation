@@ -18,6 +18,7 @@ struct GlobalData {
 	int bc;
 	int nghb;
 	double kT;
+	int mcSteps;
 	double t1;
 	double t2;
 	double t3;

@@ -16,6 +16,7 @@ GlobalData::GlobalData(string path) {
 			file >> height;
 			file >> germsNumber;
 			file >> kT;
+			file >> mcSteps;
 			file >> bc;
 			file >> nghb;
 			file >> t1;

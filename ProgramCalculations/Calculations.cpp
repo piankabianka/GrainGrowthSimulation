@@ -12,13 +12,16 @@ void Calculations::calculate() {
 
 	cout << "Rozrost ziaren" << endl;
 	cellsTab.grainGrowth();
-	cellsTab.saveDataToFile();
+	//cellsTab.saveDataToFile();
 	cout << "Iteracje" << endl;
 	cellsTab.doIterations();
 	cout << "Monte Carlo" << endl;
-	for (int i = 0; i < 5; i++) {
+	cellsTab.saveDataToFile();
+	for (int i = 0; i < cellsTab.mcSteps; i++) {
 		cellsTab.monteCarloIteration();
 		cellsTab.saveDataToFile();
 	}
+	
+	//cellsTab.calculateTemperatureForEveryCell();
 	
 }
