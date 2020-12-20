@@ -11,6 +11,7 @@ struct CellsTab {
 
 	Cell** cellsTab;
 	Cell** copyTab;
+	double** temperatureTab;
 
 	vector <double> temperatureVector;
 	int cellsNumberW;
@@ -55,4 +56,6 @@ struct CellsTab {
 	double getTemperatureForCell(double ksi, double eta);
 
 	void saveDataToFile();
+
+	void checkData();
 };

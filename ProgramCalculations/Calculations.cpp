@@ -19,9 +19,23 @@ void Calculations::calculate() {
 	cellsTab.saveDataToFile();
 	for (int i = 0; i < cellsTab.mcSteps; i++) {
 		cellsTab.monteCarloIteration();
-		cellsTab.saveDataToFile();
+		if (i % 50 == 0) {
+			cellsTab.saveDataToFile();
+		}
 	}
 	
-	//cellsTab.calculateTemperatureForEveryCell();
-	
+	/*
+	cellsTab.calculateTemperatureForEveryCell();
+	cout << endl;
+	cellsTab.showCellsTab();
+	cout << endl;
+	cellsTab.checkData();
+	cout << endl;
+
+	for (int i = 0; i < cellsTab.cellsNumberW + 2; i++) {
+		for (int j = 0; j < cellsTab.cellsNumberH + 2; j++) {
+			cout << cellsTab.temperatureTab[i][j] << "\t";
+		}
+		cout << endl;
+	}*/
 }

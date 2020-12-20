@@ -51,9 +51,43 @@ CellsTab::CellsTab(string path) {
 
 	this->functions = Functions(polynomialType, temperatureVector);
 	
-
+	//****************************************************
+	//TEMPERATURY
+	//****************************************************
 	if (t1 != -1 && t2 != -1 && t3 != -1 && t4 != -1) {
 		temperatureInfluence = true;
+		temperatureTab = new double * [cellsNumberW + 2];
+
+		for (int i = 0; i < cellsNumberW + 2; i++) {
+			temperatureTab[i] = new double[cellsNumberH + 2];
+		}
+
+		for (int i = 0; i < cellsNumberW+2; i++) {
+			for (int j = 0; j < cellsNumberH+2; j++) {
+				temperatureTab[i][j] = -1;
+			}
+		}
+
+		for (int i = 0; i < cellsNumberW; i++) {
+			for (int j = 0; j < cellsNumberH; j++) {
+				temperatureTab[i + 1][j + 1] = calculateTemperatureForOneCell(i, j);
+			}
+		}
+
+		/*temperatureTab[0][0] = temperatureTab[cellsNumberW][cellsNumberH];
+		temperatureTab[cellsNumberW + 1][cellsNumberH + 1] = temperatureTab[1][1];
+		temperatureTab[0][cellsNumberH + 1] = temperatureTab[cellsNumberW][1];
+		temperatureTab[cellsNumberW + 1][0] = temperatureTab[1][cellsNumberH];
+
+		for (int i = 1; i < cellsNumberH + 1; i++) {
+			temperatureTab[0][i] = temperatureTab[cellsNumberW][i];
+			temperatureTab[cellsNumberW + 1][i] = temperatureTab[1][i];
+		}
+		
+		for (int i = 1; i < cellsNumberW + 1; i++) {
+			temperatureTab[i][0] = temperatureTab[i ][cellsNumberH ];
+			temperatureTab[i][cellsNumberH + 1] = temperatureTab[i][1];
+		}*/
 	}
 
 
@@ -375,9 +409,13 @@ void CellsTab::calculateEnergy(int i, int j) {
 		}
 	}
 
+	//TUTAJ!!!!!!
+
 	if (temperatureInfluence) {
-		tempVector = { calculateTemperatureForOneCell(i + 1,j + 2),calculateTemperatureForOneCell(i + 2,j + 3) ,calculateTemperatureForOneCell(i + 3,j + 2) ,calculateTemperatureForOneCell(i + 2,j + 1) };
-		temperature = calculateTemperatureForOneCell(i + 2, j + 2);
+		//tempVector = { calculateTemperatureForOneCell(i + 1,j + 2),calculateTemperatureForOneCell(i + 2,j + 3) ,calculateTemperatureForOneCell(i + 3,j + 2) ,calculateTemperatureForOneCell(i + 2,j + 1) };
+		//temperature = calculateTemperatureForOneCell(i + 2, j + 2);
+		tempVector = { temperatureTab[indexI-1][indexJ],temperatureTab[indexI +1][indexJ], temperatureTab[indexI][indexJ -1], temperatureTab[indexI][indexJ +1] };
+		temperature = calculateTemperatureForOneCell(i, j);
 	}
 
 
@@ -512,8 +550,8 @@ void CellsTab::calculateTemperatureForEveryCell() {
 	double ksi;
 	double eta;
 
-	for (int i = 1; i < cellsNumberH + 1; i++) {
-		for (int j = 1; j < cellsNumberW + 1; j++) {
+	for (int i = 1; i < cellsNumberW + 1; i++) {
+		for (int j = 1; j < cellsNumberH + 1; j++) {
 			ksi = (2 * (double)j - 1 - cellsNumberH) / (cellsNumberH - 1);
 			eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
 
@@ -527,9 +565,11 @@ void CellsTab::calculateTemperatureForEveryCell() {
 double CellsTab::calculateTemperatureForOneCell(int i, int j) {
 	double ksi;
 	double eta;
+	int jIndex=j+1;
+	int iIndex=i+1;
 
-	ksi = (2 * (double)j - 1 - cellsNumberH) / (cellsNumberH - 1);
-	eta = (2 * (double)i - 1 - cellsNumberW) / (cellsNumberW - 1);
+	ksi = (2 * (double)jIndex - 1 - cellsNumberH) / (cellsNumberH - 1);
+	eta = (2 * (double)iIndex - 1 - cellsNumberW) / (cellsNumberW - 1);
 
 	return getTemperatureForCell(ksi, eta);
 }
@@ -547,4 +587,17 @@ void CellsTab::saveDataToFile() {
 	}
 
 	saveData.close();
+}
+
+void CellsTab::checkData() {
+	for (int i = 0; i < cellsNumberW; i++) {
+		for (int j = 0; j < cellsNumberH; j++) {
+			
+			cout << "komorka nr " << i << "," << j;
+			cout<<" kolor "<< cellsTab[i][j].color.r << ',' << cellsTab[i][j].color.g << ',' << cellsTab[i][j].color.b;
+			cout << " temperatura " << calculateTemperatureForOneCell(i, j);
+			cout << "\n";
+		}
+		cout << endl;
+	}
 }
