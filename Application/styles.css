@@ -52,9 +52,17 @@ label{
 }
 
 select{
-    width:100%;
+    width:130%;
     margin-top: 5px;
     color:grey;
+}
+
+#bc{
+    margin-left: 45px;
+    width:135px;
+}
+#temperature{
+    margin-left: 40px;
 }
 
 /*BUTTONS*/
@@ -79,6 +87,13 @@ select{
 
 #navigation #remove:hover{
     background-color: rgb(180, 114, 114);
+}
+
+.do-not-show-button{
+    opacity:0;
+}
+.show-button{
+    opacity:1;
 }
 
 /*SITE-NAVIGATION*/

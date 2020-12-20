@@ -23,7 +23,7 @@ const t3=document.querySelector('#t3');
 const t4=document.querySelector('#t4');
 
 //PARAMETERS
-const cellSize=5;
+const cellSize=3;
 const startPoint=0;
 let endPointX=undefined
 let endPointY=undefined;
@@ -168,7 +168,7 @@ function getData(elementsXValue, elementsYValue){
 submitButton.addEventListener('click', function(e){
     e.preventDefault();
     let elementsXValue=elementsX.querySelector('input[type="text"]').value;
-   let elementsYValue=elementsY.querySelector('input[type="text"]').value;
+    let elementsYValue=elementsY.querySelector('input[type="text"]').value;
 
     const path = getData(elementsXValue, elementsYValue);
 
@@ -176,7 +176,13 @@ submitButton.addEventListener('click', function(e){
 
 
     execFile('../ProgramCalculations/Release/ProgramCalculations.exe',[path], (error, stdout, stderr)=>{
-        
+        stepButton.classList.remove("do-not-show-button"); 
+        saveImageButton.classList.remove("do-not-show-button");
+        removeButton.classList.remove("do-not-show-button"); 
+
+        stepButton.classList.add("show-button"); 
+        saveImageButton.classList.add("show-button");
+        removeButton.classList.add("show-button");       
         drawGrid(elementsXValue, elementsYValue);
         
         dataToDisplay=readDataFromFile();
@@ -185,9 +191,13 @@ submitButton.addEventListener('click', function(e){
     })
 })
 
+let number=0;
+
 stepButton.addEventListener('click', function(e){
     e.preventDefault();
+    number+=50;
     
+    document.getElementById('counter').innerHTML ="krok "+number;
     drawCells(dataToDisplay);
     
 })
@@ -212,7 +222,6 @@ removeButton.addEventListener('click', function(e){
 
 temperatureOption.addEventListener('click', function(e){
 
-    
     if(e.target.checked){
         siteNav.classList.add("show");
         temperatureInfluence=true;
